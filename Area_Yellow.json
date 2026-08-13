@@ -1,0 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yellow",
+        "fillColor": "#F3C911",
+        "color": "#F3C911",
+        "strokeColor": "#9A7D00",
+        "strokeWidth": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              20.8285,
+              54.4277
+            ],
+            [
+              21.0184,
+              54.4467
+            ],
+            [
+              20.9139,
+              54.4078
+            ],
+            [
+              20.8285,
+              54.4277
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
