@@ -1,0 +1,18 @@
+table _Measures
+	lineageTag: 4e2bc00e-f761-4e8f-8385-40b3d4a807f6
+
+	measure 'Test Measure' = "Test"
+		lineageTag: bc11bf19-0ed2-4746-a6d8-50d24397dd1b
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				  Source = #table({},{})
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,4 @@
+relationship 6f1d2c4a-8b3e-4f7a-9c21-5d4e3b2a1f10
+	fromColumn: CT_Sales.Date
+	toColumn: Calendar.Date
+

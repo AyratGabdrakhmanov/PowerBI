@@ -1,0 +1,38 @@
+{
+  "description": "Reference info-icon table for every model (Refactoring.md step 42, user 2026-11-02; model of ClientB Inventory Coverage): hidden DAX table, Info = UNICHAR ( 128712 ) = the info icon; source of every info icon (button slicer on CT_BlankTable[Info] -> tooltip page, PBIP_Recipes.md \"info icons\"). CleanUnused.ps1 never deletes it. Apply: add the table via TOM (JsonSerializer.DeserializeObject<Table>) or TMDL, then RequestRefresh(Calculate) on it (no source, out of scope of step 39). Change log: 2026-11-03 created.",
+  "tables": [
+    {
+      "name": "CT_BlankTable",
+      "isHidden": true,
+      "columns": [
+        {
+          "type": "calculatedTableColumn",
+          "name": "Blank",
+          "dataType": "string",
+          "isHidden": true,
+          "isNameInferred": true,
+          "sourceColumn": "[Blank]",
+          "summarizeBy": "none"
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Info",
+          "dataType": "string",
+          "isHidden": true,
+          "isNameInferred": true,
+          "sourceColumn": "[Info]",
+          "summarizeBy": "none"
+        }
+      ],
+      "partitions": [
+        {
+          "name": "CT_BlankTable",
+          "source": {
+            "type": "calculated",
+            "expression": "\nADDCOLUMNS (\n    DATATABLE ( \"Blank\", STRING, { {\"\"} } )\n    , \"Info\", UNICHAR ( 128712 )\n)"
+          }
+        }
+      ]
+    }
+  ]
+}

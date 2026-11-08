@@ -1,0 +1,87 @@
+{
+  "description": "Reference data-freshness block for every report (Refactoring.md step 43, model of ClientB Sales_ClientB 2026-11-02 / 03): table 'Date Last Refreshed' (SQL native query from Power Loader\\PROD\\BI_DataFreshness_Sales.sql - replace its placeholders, needs the M parameters Server / DB; stays in the refresh, step 39 exception) + 2 hidden measures for _Measures, folder Labels: [Label Data Freshness] (3-line top-right label) and [Tooltip Data Freshness] (text of tooltip page TTDataFreshness; fill the refresh times per project). Both need CT_Language[Selected Culture] (CT_Language.json). Apply: table + measures via TOM / TMDL, then refresh the table once (new M source); report part (button, icon on CT_BlankTable[Info] from CT_BlankTable.json, tooltip page, position) - step 43. Change log: 2026-11-03 (2) \"-\" for a missing time (FORMAT of BLANK returns \"\", COALESCE never fired); (1) created.",
+  "tables": [
+    {
+      "name": "Date Last Refreshed",
+      "columns": [
+        {
+          "name": "Date Last Refreshed",
+          "dataType": "dateTime",
+          "formatString": "General Date",
+          "sourceColumn": "BIRefreshed",
+          "summarizeBy": "none",
+          "description": "Report refresh time (Israel time) - when Power BI ran the SQL query.",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "name": "Power Loader Loaded",
+          "dataType": "dateTime",
+          "formatString": "General Date",
+          "sourceColumn": "PowerLoaderLoaded",
+          "summarizeBy": "none",
+          "description": "Last Power Loader write into the sales table (Israel time) = the data in the report is as of this moment.",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "name": "Last Doc Entered",
+          "dataType": "dateTime",
+          "formatString": "General Date",
+          "sourceColumn": "LastDocEntered",
+          "summarizeBy": "none",
+          "description": "Last invoice / credit note entered in SAP (CreateDate + DocTime, Israel time).",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        }
+      ],
+      "partitions": [
+        {
+          "name": "Date Last Refreshed",
+          "mode": "import",
+          "source": {
+            "type": "m",
+            "expression": "let\n    // SQL = project copy of Power Loader\\PROD\\BI_DataFreshness_Sales.sql (PROD\\<CLIENT>\\BI_DataFreshness_Sales_<CLIENT>.sql, placeholders replaced; keep in sync): 3 times in Israel time.\n    Source = Sql.Database ( Server, DB, [ Query = \"/*#(lf)    BI data freshness - template (Power BI native query on the SQL Server of the client, one row, 3 times in Israel time):#(lf)    - BIRefreshed       - when Power BI ran this query = report refresh time;#(lf)    - PowerLoaderLoaded - last write of Power Loader into the sales table = the data in the report is as of this moment;#(lf)    - LastDocEntered    - last sales document (invoice / credit note) entered in SAP (CreateDate + DocTime);#(lf)                          documents entered after it appear after the next refresh.#(lf)    Before use replace the placeholders (4 places): PowerLoader_<client> = the Power Loader database,#(lf)    <SAP company DB> = the SAP B1 company database; sales table ETL_SA_Sales = the table the report reads.#(lf)    Both databases must be on the same SQL Server (three-part names). Save the client copy as#(lf)    PROD\\<CLIENT>\\BI_DataFreshness_Sales_<CLIENT>.sql.#(lf)    Run by Power BI directly, NOT as a Power Loader task: as a task BIRefreshed would be the load time#(lf)    (and Power Loader $ macros are not expanded, so the names are written in full).#(lf)    Time zone: the server clock may be in another zone, so server-local times are tagged with the server's current#(lf)    UTC offset, then converted with AT TIME ZONE 'Israel Standard Time' (summer time included).#(lf)    Needs: SQL Server 2016+; VIEW SERVER STATE for sys.dm_db_index_usage_stats (else PowerLoaderLoaded is NULL);#(lf)    SELECT on the SAP OINV / ORIN; PowerLoaderLoaded is NULL after a SQL Server restart until the next Power Loader run.#(lf)    Change log:#(lf)    2026-11-02  (1) created.#(lf)*/#(lf)SELECT#(lf)  [Z].[BIRefreshed]#(lf), CAST ( TODATETIMEOFFSET ( [L].[LastLoad], [Z].[ServerOffset] ) AT TIME ZONE 'Israel Standard Time' AS DATETIME2(0) )    AS [PowerLoaderLoaded]#(lf), CAST ( TODATETIMEOFFSET ( [D].[LastEntered], [Z].[ServerOffset] ) AT TIME ZONE 'Israel Standard Time' AS DATETIME2(0) ) AS [LastDocEntered]#(lf)FROM (#(lf)    -- report refresh time (this query runs at refresh) + server UTC offset in minutes#(lf)    SELECT#(lf)      CAST ( SYSDATETIMEOFFSET() AT TIME ZONE 'Israel Standard Time' AS DATETIME2(0) ) AS [BIRefreshed]#(lf)    , DATEPART ( TZOFFSET, SYSDATETIMEOFFSET() )                                    AS [ServerOffset]#(lf)) AS [Z]#(lf)CROSS JOIN (#(lf)    -- last Power Loader write into the sales table (server local time)#(lf)    SELECT MAX ( [U].[last_user_update] ) AS [LastLoad]#(lf)    FROM sys.dm_db_index_usage_stats AS [U]#(lf)    WHERE 1=1#(lf)      AND [U].[database_id] = DB_ID ( N'PowerLoader_<client>' )#(lf)      AND [U].[object_id]   = OBJECT_ID ( N'[PowerLoader_<client>].[dbo].[ETL_SA_Sales]' )#(lf)) AS [L]#(lf)CROSS JOIN (#(lf)    -- last invoice / credit note entered in SAP: entry date + entry time (DocTime = HHMM, server local time)#(lf)    SELECT MAX ( DATEADD ( MINUTE, [H].[DocTime] / 100 * 60 + [H].[DocTime] % 100, [H].[CreateDate] ) ) AS [LastEntered]#(lf)    FROM (#(lf)                  SELECT [CANCELED], [CreateDate], [DocTime] FROM [<SAP company DB>].[dbo].[OINV]#(lf)        UNION ALL SELECT [CANCELED], [CreateDate], [DocTime] FROM [<SAP company DB>].[dbo].[ORIN]#(lf)    ) AS [H]#(lf)    WHERE 1=1#(lf)      AND [H].[CANCELED]   = 'N'#(lf)      AND [H].[CreateDate] >= DATEADD ( DAY, -60, CAST ( GETDATE() AS DATE ) )   -- last 60 days is enough for MAX#(lf)) AS [D]\" ] )\nin\n    Source"
+          }
+        }
+      ],
+      "annotations": [
+        {
+          "name": "PBI_ResultType",
+          "value": "Table"
+        }
+      ]
+    },
+    {
+      "name": "_Measures",
+      "measures": [
+        {
+          "name": "Label Data Freshness",
+          "expression": "\n-- Top-right label: 3 times (Israel time, BI_DataFreshness_Sales_<CLIENT>.sql), He / En; \"-\" when a time is missing.\n-- He lines: RLE ... PDF (UNICHAR 8235 / 8236) keep \"text: date\" order; the date is an LTR isolate (LRI / PDI 8294 / 8297).\nVAR __CheckCulture = COALESCE ( [Selected Culture], USERCULTURE () )\nVAR __Fmt          = \"dd/MM/yy HH:mm\"\nVAR __NL           = UNICHAR ( 10 )\nVAR __RtlStart     = UNICHAR ( 8235 )\nVAR __RtlStop      = UNICHAR ( 8236 )\nVAR __LtrStart     = UNICHAR ( 8294 )\nVAR __LtrStop      = UNICHAR ( 8297 )\n-- FORMAT ( BLANK () ) returns \"\", so a missing time is tested with ISBLANK, not COALESCE.\nVAR __RefreshedDT  = MAX ( 'Date Last Refreshed'[Date Last Refreshed] )\nVAR __LoadedDT     = MAX ( 'Date Last Refreshed'[Power Loader Loaded] )\nVAR __LastDocDT    = MAX ( 'Date Last Refreshed'[Last Doc Entered] )\nVAR __Refreshed    = IF ( ISBLANK ( __RefreshedDT ), \"-\", FORMAT ( __RefreshedDT, __Fmt ) )\nVAR __Loaded       = IF ( ISBLANK ( __LoadedDT ),    \"-\", FORMAT ( __LoadedDT,    __Fmt ) )\nVAR __LastDoc      = IF ( ISBLANK ( __LastDocDT ),   \"-\", FORMAT ( __LastDocDT,   __Fmt ) )\nRETURN\n    SWITCH ( TRUE ()\n        , __CheckCulture = \"he-IL\"\n            ,       __RtlStart & \"רענון Power BI: \"    & __LtrStart & __Refreshed & __LtrStop & __RtlStop & __NL    -- Power BI Refresh\n                & __RtlStart & \"טעינת SQL: \"          & __LtrStart & __Loaded    & __LtrStop & __RtlStop & __NL    -- SQL load\n                & __RtlStart & \"מסמך מכירה אחרון: \"  & __LtrStart & __LastDoc   & __LtrStop & __RtlStop           -- Last Sales Doc\n        ,    \"Power BI Refresh: \" & __Refreshed & __NL\n            & \"SQL load: \"        & __Loaded    & __NL\n            & \"Last Sales Doc: \"  & __LastDoc\n    )",
+          "displayFolder": "Labels",
+          "isHidden": true,
+          "description": "Top-right label: 3 times (Israel time), He / En."
+        },
+        {
+          "name": "Tooltip Data Freshness",
+          "expression": "\n-- Info icon tooltip (page TTDataFreshness): what each of the 3 label times means + refresh schedule, He / En (10 lines).\n-- Names = the label measure (Label Data Freshness). He lines: RLE ... PDF (UNICHAR 8235 / 8236).\nVAR __CheckCulture = COALESCE ( [Selected Culture], USERCULTURE () )\nVAR __NL           = UNICHAR ( 10 )\nVAR __RtlStart     = UNICHAR ( 8235 )\nVAR __RtlStop      = UNICHAR ( 8236 )\nRETURN\n    SWITCH ( TRUE ()\n        , __CheckCulture = \"he-IL\"\n            ,        __RtlStart & \"רענון Power BI - מתי הדוח קרא את הנתונים בפעם האחרונה.\" & __RtlStop              -- Power BI Refresh - when the report last read the data.\n                & __NL\n                & __NL & __RtlStart & \"טעינת SQL - מתי הנתונים הועתקו מ-SAP למאגר הדוח.\" & __RtlStop                 -- SQL load - when the data was last copied from SAP into the report database.\n                & __NL & __RtlStart & \"הדוח מציג את הנתונים נכון לרגע זה.\" & __RtlStop                                -- The report shows the data as of this moment.\n                & __NL\n                & __NL & __RtlStart & \"מסמך מכירה אחרון - מועד הקלדת החשבונית / זיכוי האחרונים ב-SAP.\" & __RtlStop   -- Last Sales Doc - when the last invoice / credit note was entered in SAP.\n                & __NL & __RtlStart & \"מסמכים שהוקלדו מאוחר יותר יופיעו בעדכון הבא.\" & __RtlStop                     -- Documents entered later appear after the next refresh.\n                & __NL\n                & __NL & __RtlStart & \"הדוח מתעדכן כל יום בשעות (שעון ישראל):\" & __RtlStop                          -- The report refreshes daily at Israel time:\n                & __NL & __RtlStart & \"<refresh times HH:MM, comma separated - fill per project>\" & __RtlStop\n        ,           \"Power BI Refresh - when the report last read the data.\"\n            & __NL\n            & __NL & \"SQL load - when the data was last copied from SAP into the report database.\"\n            & __NL & \"The report shows the data as of this moment.\"\n            & __NL\n            & __NL & \"Last Sales Doc - when the last invoice / credit note was entered in SAP.\"\n            & __NL & \"Documents entered later appear after the next refresh.\"\n            & __NL\n            & __NL & \"The report refreshes daily at Israel time:\"\n            & __NL & \"<refresh times HH:MM, comma separated - fill per project>\"\n    )",
+          "displayFolder": "Labels",
+          "isHidden": true,
+          "description": "Info icon tooltip (page TTDataFreshness): meaning of the 3 times + refresh schedule, He / En."
+        }
+      ]
+    }
+  ]
+}

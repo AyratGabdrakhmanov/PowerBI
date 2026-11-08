@@ -1,0 +1,67 @@
+2026-10-15 23:03  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-15 23:03    ok      visualContainerSchema-2.12.0 (latest)
+2026-10-15 23:03    ok      visualConfigurationSchema-2.7.0 (latest)
+2026-10-15 23:03    ok      page-2.1.0 (latest)
+2026-10-15 23:03    ok      reportThemeSchema-2.157 (latest)
+2026-10-15 23:03    pbir    ERROR theme: Cannot convert the JSON string because it contains keys with different casing. Please use the -AsHashTable switch instead. The key that was attempted to be added to the existing key 'gridlineColor' was 'gridLineColor'.
+2026-10-15 23:03    pbir    bundled schemas up to date
+2026-10-15 23:03  done, 0 update(s)
+2026-10-15 23:04  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-15 23:04    ok      visualContainerSchema-2.12.0 (latest)
+2026-10-15 23:04    ok      visualConfigurationSchema-2.7.0 (latest)
+2026-10-15 23:04    ok      page-2.1.0 (latest)
+2026-10-15 23:04    ok      reportThemeSchema-2.157 (latest)
+2026-10-15 23:04    pbir    installed: theme 2.155->2.157; regenerate ok
+2026-10-15 23:04  done, 1 update(s)
+2026-10-16 09:00  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-16 09:00            links visualContainerSchema-2.12.0.json -> visualContainerSchema-2.13.0.json in AI_Tools_MCP_CLI.md
+2026-10-16 09:00            links visualContainerSchema-2.12.0.json -> visualContainerSchema-2.13.0.json in PBIP_Pages_Visuals.md
+2026-10-16 09:00            links visualContainerSchema-2.12.0.json -> visualContainerSchema-2.13.0.json in PBIP_Recipes.md
+2026-10-16 09:00            links visualContainerSchema-2.12.0.json -> visualContainerSchema-2.13.0.json in POWERBI_PBIP_STRUCTURE.md
+2026-10-16 09:00    UPDATED visualContainerSchema-2.13.0.json (was 2.12.0) Released in: September 2026 Notes: - Updates the embedded `visualConfiguration` reference from `2.7.0` to `2.8.0` for the SU09 visual updates
+2026-10-16 09:00            links visualConfigurationSchema-2.7.0.json -> visualConfigurationSchema-2.8.0.json in AI_Tools_MCP_CLI.md
+2026-10-16 09:00            links visualConfigurationSchema-2.7.0.json -> visualConfigurationSchema-2.8.0.json in PBIP_Pages_Visuals.md
+2026-10-16 09:00            links visualConfigurationSchema-2.7.0.json -> visualConfigurationSchema-2.8.0.json in PBIP_Recipes.md
+2026-10-16 09:00            links visualConfigurationSchema-2.7.0.json -> visualConfigurationSchema-2.8.0.json in POWERBI_PBIP_STRUCTURE.md
+2026-10-16 09:00    UPDATED visualConfigurationSchema-2.8.0.json (was 2.7.0) Released in: September 2026 Notes: - Updates the schema identity for the SU09 visual updates, retaining the schema structure introduced in `2.6.0` - Includes both the standalone and embedded visual configuration schemas
+2026-10-16 09:00    ok      page-2.1.0 (latest)
+2026-10-16 09:00            links reportThemeSchema-2.157.json -> reportThemeSchema-2.159.json in PBIP_Pages_Visuals.md
+2026-10-16 09:00            links reportThemeSchema-2.157.json -> reportThemeSchema-2.159.json in PBIP_Scripts.md
+2026-10-16 09:00            links reportThemeSchema-2.157.json -> reportThemeSchema-2.159.json in PBIP_Theme.md
+2026-10-16 09:00            links reportThemeSchema-2.157.json -> reportThemeSchema-2.159.json in POWERBI_PBIP_STRUCTURE.md
+2026-10-16 09:00    UPDATED reportThemeSchema-2.159.json (was 2.157) 
+2026-10-16 09:00    pbir    installed: report/visualConfiguration 2.7.0->2.8.0, report/visualContainer 2.12.0->2.13.0, report/visualContainerMobileState 2.7.0->2.8.0, theme 2.157->2.159; regenerate ok
+2026-10-16 09:00  done, 4 update(s)
+2026-10-17 09:00  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-17 09:00    ok      visualContainerSchema-2.13.0 (latest)
+2026-10-17 09:00    ok      visualConfigurationSchema-2.8.0 (latest)
+2026-10-17 09:00    ok      page-2.1.0 (latest)
+2026-10-17 09:00    ok      reportThemeSchema-2.159 (latest)
+2026-10-17 09:00    pbir    bundled schemas up to date
+2026-10-17 09:00  done, 0 update(s)
+2026-10-18 09:00  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-18 09:00    ok      visualContainerSchema-2.13.0 (latest)
+2026-10-18 09:00    ok      visualConfigurationSchema-2.8.0 (latest)
+2026-10-18 09:00    ok      page-2.1.0 (latest)
+2026-10-18 09:00    ok      reportThemeSchema-2.159 (latest)
+2026-10-18 09:00    pbir    bundled schemas up to date
+2026-10-18 09:00  done, 0 update(s)
+2026-10-19 09:00  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-19 09:00    ok      visualContainerSchema-2.13.0 (latest)
+2026-10-19 09:00    ok      visualConfigurationSchema-2.8.0 (latest)
+2026-10-19 09:00    ok      page-2.1.0 (latest)
+2026-10-19 09:00    ok      reportThemeSchema-2.159 (latest)
+2026-10-19 09:00    pbir    bundled schemas up to date
+2026-10-19 09:00  done, 0 update(s)
+2026-10-20 09:39  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-20 09:39    ok      visualContainerSchema-2.13.0 (latest)
+2026-10-20 09:39    ok      visualConfigurationSchema-2.8.0 (latest)
+2026-10-20 09:39    ok      page-2.1.0 (latest)
+2026-10-20 09:39    ok      reportThemeSchema-2.159 (latest)
+2026-10-21 09:00  UpdateSchemas 2026-10-15.2 start (GitHub: gh, authenticated)
+2026-10-21 09:00    ok      visualContainerSchema-2.13.0 (latest)
+2026-10-21 09:00    ok      visualConfigurationSchema-2.8.0 (latest)
+2026-10-21 09:00    ok      page-2.1.0 (latest)
+2026-10-21 09:00    ok      reportThemeSchema-2.159 (latest)
+2026-10-21 09:00    pbir    bundled schemas up to date
+2026-10-21 09:00  done, 0 update(s)

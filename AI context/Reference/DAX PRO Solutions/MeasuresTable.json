@@ -1,0 +1,34 @@
+{
+  "tables": [
+    {
+  "name": "_Measures",
+  "partitions": [
+    {
+      "name": "_Measures",
+      "mode": "import",
+      "source": {
+        "type": "m",
+        "expression": "let\n  Source = #table({},{})\nin\n    Source"
+      }
+    }
+  ],
+  "measures": [
+    {
+      "name": "Test Measure",
+      "expression": "\"Test\"",
+      "dataType": "string"
+    }
+  ],
+  "annotations": [
+    {
+      "name": "PBI_NavigationStepName",
+      "value": "Navigation"
+    },
+    {
+      "name": "PBI_ResultType",
+      "value": "Table"
+    }
+  ]
+}
+  ]
+}

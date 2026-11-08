@@ -1,0 +1,293 @@
+table _Measures
+	lineageTag: 4e2bc00e-f761-4e8f-8385-40b3d4a807f6
+
+	measure 'Test Measure' = "Test"
+		lineageTag: bc11bf19-0ed2-4746-a6d8-50d24397dd1b
+
+	measure 'Sales Amount' = SUM ( CT_Sales[Amount] )
+		formatString: #,0
+		displayFolder: _Sales
+		lineageTag: 41dfb915-3c18-4ccc-9a39-83396b0b840a
+
+	measure 'Sales CUM' = TI.CUM ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 5261eddb-06e9-45cf-97a7-44ddc2a76c11
+
+	measure 'Sales YTD' = TI.YTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: a9fb70db-e14f-4228-86a2-0dca293b1118
+
+	measure 'Sales QTD' = TI.QTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: c8cd037f-9023-429e-a5d0-557dd7064beb
+
+	measure 'Sales MTD' = TI.MTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 3ccb770c-4f0a-41d7-9f1d-cbacedbd8172
+
+	measure 'Sales DTD' = TI.DTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: ce4d9ae3-5959-4cc0-86e2-fdc3bdbf92b0
+
+	measure 'Sales PD' = TI.PD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: ea2a584d-68b6-40ff-b522-864dcbcae874
+
+	measure 'Sales PY' = TI.PY ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 4cc75168-67da-4ce6-8142-82aecdc316b1
+
+	measure 'Sales PYC' = TI.PYC ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: a0d46530-12a8-4619-8cd1-e6bedf8f6e81
+
+	measure 'Sales PYTD' = TI.PYTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: d4affe87-64d4-4b02-9207-b6b31909dc96
+
+	measure 'Sales PYQTD' = TI.PYQTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: eae51dbd-da57-4ae5-bdb1-fd8bcffd2fe9
+
+	measure 'Sales PYMTD' = TI.PYMTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 10118c38-3f3d-4313-9d50-e5f10c290705
+
+	measure 'Sales PYMC' = TI.PYMC ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 098851f8-5e1f-4a47-a199-f073ea40f0e1
+
+	measure 'Sales PQTD' = TI.PQTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 80f03925-d17f-4b1e-82a6-7c95c384d765
+
+	measure 'Sales PMTD' = TI.PMTD ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: c48d5a74-cc57-4a20-b209-6b366c6f6eef
+
+	measure 'Sales PMC' = TI.PMC ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: b5aa61e9-aa3f-45ca-b189-e271f87c8258
+
+	measure 'Sales DLY' = TI.DLY ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: f00cfe78-5a47-4016-82c0-5d6220af1043
+
+	measure 'Sales R12' = TI.RollingMonths ( [Sales Amount], 12 )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: f3ac825f-6651-4de5-b1cd-457cf0acd151
+
+	measure 'Sales Prev R12' = TI.PY ( TI.RollingMonths ( [Sales Amount], 12 ) )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 0b093962-9bc2-499c-b63f-bd5edc25ced2
+
+	measure 'Sales Moving 3M AVG' = TI.MovingAvg ( [Sales Amount], 3 )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 8cd8144a-e75b-4efb-ad55-ebd0ee4738f0
+
+	measure 'Sales Last 12M' = TI.LastNMonths ( [Sales Amount], 12 )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 4d9d4607-93bf-4254-a201-137c0a4478aa
+
+	measure 'Sales YOY Change' = TI.Change ( [Sales Amount], TI.PY ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: dd7e65e6-243c-42fb-af6f-42dd20184c65
+
+	measure 'Sales YOY Change %' = TI.ChangePct ( [Sales Amount], TI.PY ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: b53a9822-72a3-484f-a2e1-2cf5a5826d36
+
+	measure 'Sales YOYTD Change' = TI.Change ( TI.YTD ( [Sales Amount] ), TI.PYTD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: d62fe5f4-fedb-4e3e-bde2-306b34d0e773
+
+	measure 'Sales YOYTD Change %' = TI.ChangePct ( TI.YTD ( [Sales Amount] ), TI.PYTD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: df470dd9-94f0-4923-b7df-b2a047c929b9
+
+	measure 'Sales YOQTD Change' = TI.Change ( TI.QTD ( [Sales Amount] ), TI.PYQTD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 1ebc473e-f0b4-4415-bc91-7e914fefaa96
+
+	measure 'Sales YOQTD Change %' = TI.ChangePct ( TI.QTD ( [Sales Amount] ), TI.PYQTD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 271e76f9-d434-43a0-8a16-522dfe76c45f
+
+	measure 'Sales YOMTD Change' = TI.Change ( TI.MTD ( [Sales Amount] ), TI.PYMTD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: c2a0788e-1bcd-43f5-938d-490bdb28b69e
+
+	measure 'Sales YOMTD Change %' = TI.ChangePct ( TI.MTD ( [Sales Amount] ), TI.PYMTD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 1d65b5b1-10c7-4790-b4b2-ab0f16e8926b
+
+	measure 'Sales QOQ Change' = TI.QOQ ( [Sales Amount] )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 6c901bd1-b34e-4f0d-8128-99f573c2aaf5
+
+	measure 'Sales QOQ Change %' = TI.QOQPct ( [Sales Amount] )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 60796657-08e1-4077-b327-f3a917803bf8
+
+	measure 'Sales MOM Change' = TI.MOM ( [Sales Amount] )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 9388225a-801a-4778-b12a-ad38852e8459
+
+	measure 'Sales MOM Change %' = TI.MOMPct ( [Sales Amount] )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 45a1f3c1-dd3a-47bc-b1a0-d8adbd0f6c60
+
+	measure 'Sales DOD Change' = TI.Change ( TI.DTD ( [Sales Amount] ), TI.PD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: a6bee4f3-c14c-4aef-b509-d6c5020a0842
+
+	measure 'Sales DOD Change %' = TI.ChangePct ( TI.DTD ( [Sales Amount] ), TI.PD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: d308071a-a4e6-438f-94cc-e9295753c7d0
+
+	measure 'Sales MODLY Change' = TI.Change ( TI.MTD ( [Sales Amount] ), TI.DLY ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 823d8acd-54c9-4581-9c06-14c79ba44ca7
+
+	measure 'Sales MODLY Change %' = TI.ChangePct ( TI.MTD ( [Sales Amount] ), TI.DLY ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 2d4c7c8b-1e92-4b2e-a42a-b671076f34aa
+
+	measure 'Sales PQ' = TI.PQ ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 2a2c1d70-1b5c-4aba-97e5-f16b4acb875b
+
+	measure 'Sales PM' = TI.PM ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 3f02c571-548a-46df-9e95-26b30f78f9d9
+
+	measure 'Sales PQC' = TI.PQC ( [Sales Amount] )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 7cda9b5f-ac77-4d97-92ff-733aac5b46a8
+
+	measure 'Sales YTD Hide Future' = TI.HideFuture ( TI.YTD ( [Sales Amount] ) )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 8c1cec1a-1d70-4263-bc87-d057f9ef7a26
+
+	measure 'Sales PYC 2Y' = TI.PYCN ( [Sales Amount], 2 )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: 8395e01b-0776-41c8-94d7-522f026a97b1
+
+	measure 'Sales YTD To Month' = TI.YTDToMonth ( TI.YTD ( [Sales Amount] ) )
+		formatString: #,0
+		displayFolder: _TI Period
+		lineageTag: e7707aa8-5451-4062-9571-a1d2d318daa3
+
+	measure 'Sales QOQTD Change' = TI.Change ( TI.QTD ( [Sales Amount] ), TI.PQTD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: e359237e-70d7-41f2-b451-b766d6d13347
+
+	measure 'Sales QOQTD Change %' = TI.ChangePct ( TI.QTD ( [Sales Amount] ), TI.PQTD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 53ec599f-f036-4bb8-ad59-103ad1646328
+
+	measure 'Sales MOMTD Change' = TI.Change ( TI.MTD ( [Sales Amount] ), TI.PMTD ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 37fa4047-13f5-4519-b0fb-fd44d98f9ef8
+
+	measure 'Sales MOMTD Change %' = TI.ChangePct ( TI.MTD ( [Sales Amount] ), TI.PMTD ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 84dc8f7b-b194-4398-9292-0af3c85e7f83
+
+	measure 'Sales YTD vs PYC Change' = TI.Change ( TI.YTD ( [Sales Amount] ), TI.PYC ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: f7b98ad7-53d7-41fb-a6fd-42a31c2e5e49
+
+	measure 'Sales YTD vs PYC Change %' = TI.ChangePct ( TI.YTD ( [Sales Amount] ), TI.PYC ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: f44ae24a-46a8-4843-ba68-2c52152f65c6
+
+	measure 'Sales QTD vs PQC Change' = TI.Change ( TI.QTD ( [Sales Amount] ), TI.PQC ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: 6eafd419-6237-4679-ba5e-0bbea67812a2
+
+	measure 'Sales QTD vs PQC Change %' = TI.ChangePct ( TI.QTD ( [Sales Amount] ), TI.PQC ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: d9178db2-bb6b-4327-b6ae-4e8fb4ab86b0
+
+	measure 'Sales MTD vs PMC Change' = TI.Change ( TI.MTD ( [Sales Amount] ), TI.PMC ( [Sales Amount] ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: f7915057-ca35-4af7-94c8-2065427a068b
+
+	measure 'Sales MTD vs PMC Change %' = TI.ChangePct ( TI.MTD ( [Sales Amount] ), TI.PMC ( [Sales Amount] ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: bf7cc0ba-07fc-4d9c-9fb8-20c3338e26ef
+
+	measure 'Sales R12 YOY Change' = TI.Change ( TI.RollingMonths ( [Sales Amount], 12 ), TI.PY ( TI.RollingMonths ( [Sales Amount], 12 ) ) )
+		formatString: +#,##0;-#,##0
+		displayFolder: _TI Change
+		lineageTag: ff982a7a-9360-4df4-894d-9f402a7d10ed
+
+	measure 'Sales R12 YOY Change %' = TI.ChangePct ( TI.RollingMonths ( [Sales Amount], 12 ), TI.PY ( TI.RollingMonths ( [Sales Amount], 12 ) ) )
+		formatString: +#,0%;-#,0%;0%
+		displayFolder: _TI Change
+		lineageTag: 8e832af9-043b-4b74-928a-e1629d6deeee
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				  Source = #table({},{})
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

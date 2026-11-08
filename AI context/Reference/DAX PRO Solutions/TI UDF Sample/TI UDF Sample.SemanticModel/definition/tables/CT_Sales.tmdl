@@ -1,0 +1,36 @@
+table CT_Sales
+	lineageTag: 65771e03-9d9d-45ad-ba46-31b79c1c0aa1
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: d498bc3b-f8cf-4210-b5d1-47de28431ecf
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: b58d1a9c-ce8e-4b42-a1d4-ffe25cd037e2
+		summarizeBy: none
+		sourceColumn: [Amount]
+
+		annotation SummarizationSetBy = User
+
+	partition CT_Sales = calculated
+		mode: import
+		source =
+				
+				VAR __TodayDate = TODAY()
+				VAR __Dates     = CALENDAR ( DATE ( YEAR ( __TodayDate ) - 2, 1, 1 ), __TodayDate )
+				RETURN
+				    SELECTCOLUMNS (
+				        __Dates
+				        , "Date",   [Date]
+				        , "Amount", 100 + MOD ( INT ( [Date] ) * 37, 101 ) + MONTH ( [Date] ) * 10    -- deterministic demo values
+				    )
+

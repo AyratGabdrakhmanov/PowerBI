@@ -1,0 +1,58 @@
+{
+  "description": "Reference Power Query parameters + query groups for every project (user 2026-10-27, model of Sales Channels). Set the values per client; every Sql.Database uses Sql.Database(Server, DB, [CreateNavigationProperties=false]). Groups: Parameters (0), Fact (1), Dimension (2). Change log: 2026-10-27 created.",
+  "queryGroups": [
+    {
+      "folder": "Parameters",
+      "annotations": [
+        {
+          "name": "PBI_QueryGroupOrder",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "folder": "Fact",
+      "annotations": [
+        {
+          "name": "PBI_QueryGroupOrder",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "folder": "Dimension",
+      "annotations": [
+        {
+          "name": "PBI_QueryGroupOrder",
+          "value": "2"
+        }
+      ]
+    }
+  ],
+  "expressions": [
+    {
+      "name": "Server",
+      "kind": "m",
+      "expression": "\"<SQL server>\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+      "queryGroup": "Parameters",
+      "annotations": [
+        {
+          "name": "PBI_ResultType",
+          "value": "Text"
+        }
+      ]
+    },
+    {
+      "name": "DB",
+      "kind": "m",
+      "expression": "\"<Power Loader database>\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+      "queryGroup": "Parameters",
+      "annotations": [
+        {
+          "name": "PBI_ResultType",
+          "value": "Text"
+        }
+      ]
+    }
+  ]
+}

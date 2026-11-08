@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "TI UDF Sample"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bd35b22b-47db-4c42-9b86-fe2f1a78ed22"
+  }
+}

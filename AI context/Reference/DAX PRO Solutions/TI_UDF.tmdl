@@ -1,0 +1,345 @@
+createOrReplace
+
+	/// Change = current - previous; blank when the previous value is blank or 0 (CG items YOY, YOYTD, YOQTD, YOMTD, QOQ, MOM, MOMTD, DOD, MODLY, MoM, MTD YoY, YTD YoY, Prev Month Chg)
+	/// @param {SCALAR} currentValue - e.g. TI.YTD ( [Sales Amount] )
+	/// @param {SCALAR} previousValue - e.g. TI.PYTD ( [Sales Amount] )
+	function 'TI.Change' =
+			( currentValue : SCALAR VAL, previousValue : SCALAR VAL ) =>
+			( currentValue - previousValue ) * DIVIDE ( previousValue, previousValue )
+
+	/// Change % = ( current - previous ) / | previous | (all "... %" comparison CG items)
+	/// @param {SCALAR} currentValue - e.g. TI.YTD ( [Sales Amount] )
+	/// @param {SCALAR} previousValue - e.g. TI.PYTD ( [Sales Amount] )
+	function 'TI.ChangePct' =
+			( currentValue : SCALAR VAL, previousValue : SCALAR VAL ) =>
+			DIVIDE ( currentValue - previousValue, ABS ( previousValue ) )
+
+	/// Change = current - previous; blank when the current OR the previous value is blank or 0 (CG YOY / YOYTD / YOQTD / YOMTD pattern) - for comparisons with last year
+	/// @param {SCALAR} currentValue - e.g. TI.YTD ( [Sales Amount] )
+	/// @param {SCALAR} previousValue - e.g. TI.PYTD ( [Sales Amount] )
+	function 'TI.ChangeIfBoth' =
+			( currentValue : SCALAR VAL, previousValue : SCALAR VAL ) =>
+			( currentValue - previousValue ) * DIVIDE ( previousValue, previousValue ) * DIVIDE ( currentValue, currentValue )
+
+	/// Change % = ( current - previous ) / | previous |; blank when the current OR the previous value is blank or 0 - for comparisons with last year
+	/// @param {SCALAR} currentValue - e.g. TI.YTD ( [Sales Amount] )
+	/// @param {SCALAR} previousValue - e.g. TI.PYTD ( [Sales Amount] )
+	function 'TI.ChangePctIfBoth' =
+			( currentValue : SCALAR VAL, previousValue : SCALAR VAL ) =>
+			DIVIDE ( currentValue - previousValue, ABS ( previousValue ) ) * DIVIDE ( currentValue, currentValue )
+
+	/// Month-to-date (CG item MTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.MTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATESMTD ( 'Calendar'[Date] )
+			)
+
+	/// Quarter-to-date (CG item QTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.QTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATESQTD ( 'Calendar'[Date] )
+			)
+
+	/// Year-to-date (CG item YTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.YTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATESYTD ( 'Calendar'[Date] )
+			)
+
+	/// Same period one month back (XU PM); with DATESMTD the result equals TI.PMTD
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PM' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESMTD ( 'Calendar'[Date] ), -1, MONTH )    -- 2026-10-31 changed: DATESMTD as in CG PMC, a Year / Quarter total = its last month's previous month; before, DATEADD ( 'Calendar'[Date] ) shifted the whole year by one month
+			)
+
+	/// Previous quarter-to-date, as CG item PQ; the result equals TI.PQTD
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PQ' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESQTD ( 'Calendar'[Date] ), -1, QUARTER )    -- 2026-10-31 changed: DATESQTD as in CG PQ, a Year total = its last quarter's previous quarter; before, DATEADD ( 'Calendar'[Date] ) shifted the same dates (May -> Feb, a year by one quarter)
+			)
+
+	/// Same period previous year (CG item PY)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]; nest to shift any period: TI.PY ( TI.YTD ( [X] ) ) = PYTD
+	function 'TI.PY' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( 'Calendar'[Date], -1, YEAR )
+			)
+
+	/// Previous month-to-date (CG items PMTD, Prev MTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PMTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESMTD ( 'Calendar'[Date] ), -1, MONTH )    -- DATESMTD for the Total on Year level
+			)
+
+	/// Previous quarter-to-date (CG items PQ, PQTD - same logic)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PQTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESQTD ( 'Calendar'[Date] ), -1, QUARTER )
+			)
+
+	/// Previous year-to-date (CG item PYTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESYTD ( 'Calendar'[Date] ), -1, YEAR )
+			)
+
+	/// Previous year month-to-date (CG items PYMTD, Prev Year MTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYMTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESMTD ( 'Calendar'[Date] ), -1, YEAR )
+			)
+
+	/// Previous year quarter-to-date (CG item PYQTD)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYQTD' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( DATESQTD ( 'Calendar'[Date] ), -1, YEAR )
+			)
+
+	/// Previous month complete = the whole previous month (CG items PMC, Prev Month)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PMC' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , PARALLELPERIOD ( DATESMTD ( 'Calendar'[Date] ), -1, MONTH )    -- DATESMTD for the Total on Year level
+			)
+
+	/// Previous quarter complete = the whole previous quarter (XU PQC)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PQC' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , PARALLELPERIOD ( DATESQTD ( 'Calendar'[Date] ), -1, QUARTER )    -- DATESQTD for the Total on Year level
+			)
+
+	/// Previous year complete = the whole previous year (CG item PYC)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYC' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , PARALLELPERIOD ( 'Calendar'[Date], -1, YEAR )
+			)
+
+	/// Previous year month complete = the whole same month previous year (CG item PYMC; the CG version returns the whole previous year)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYMC' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( PARALLELPERIOD ( DATESMTD ( 'Calendar'[Date] ), 0, MONTH ), -1, YEAR )    -- whole last month in context; DATESMTD for the Total on Year level
+			)
+
+	/// Previous year quarter complete = the whole same quarter previous year (same pattern as TI.PYMC)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.PYQC' =
+			( baseMeasure : EXPR ) =>
+			CALCULATE (
+			    baseMeasure
+			    , DATEADD ( PARALLELPERIOD ( DATESQTD ( 'Calendar'[Date] ), 0, QUARTER ), -1, YEAR )    -- whole last quarter in context; DATESQTD for the Total on Year level
+			)
+
+	/// Change, MTD vs previous month MTD (XU MOMTD Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.MOMTD. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.MTDvsPMTD' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.MTD ( baseMeasure ), TI.PMTD ( baseMeasure ) )
+
+	/// Change %, MTD vs previous month MTD (XU MOMTD %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.MOMTDPct. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.MTDvsPMTDPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.MTD ( baseMeasure ), TI.PMTD ( baseMeasure ) )
+
+	/// Change, QTD vs previous quarter QTD (XU QOQTD Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.QOQTD. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.QTDvsPQTD' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.QTD ( baseMeasure ), TI.PQTD ( baseMeasure ) )
+
+	/// Change %, QTD vs previous quarter QTD (XU QOQTD %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.QOQTDPct. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.QTDvsPQTDPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.QTD ( baseMeasure ), TI.PQTD ( baseMeasure ) )
+
+	/// Change, YTD vs previous year YTD (XU YOYTD Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOYTD. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.YTDvsPYTD' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.YTD ( baseMeasure ), TI.PYTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, YTD vs previous year YTD (XU YOYTD %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOYTDPct. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.YTDvsPYTDPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.YTD ( baseMeasure ), TI.PYTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, MTD vs previous year MTD (XU YOMTD Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOMTD. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.MTDvsPYMTD' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.MTD ( baseMeasure ), TI.PYMTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, MTD vs previous year MTD (XU YOMTD %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOMTDPct. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.MTDvsPYMTDPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.MTD ( baseMeasure ), TI.PYMTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, QTD vs previous year QTD (XU YOQTD Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOQTD. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.QTDvsPYQTD' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.QTD ( baseMeasure ), TI.PYQTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, QTD vs previous year QTD (XU YOQTD %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YOQTDPct. Same days at date level; with a whole period selected it compares that period (data so far, if unfinished) with the whole previous one
+	function 'TI.QTDvsPYQTDPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.QTD ( baseMeasure ), TI.PYQTD ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, MTD vs the whole previous month (XU MTDOPMC Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.MTDOPMC (XU name). Always compares with the whole previous period
+	function 'TI.MTDvsFullPM' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.MTD ( baseMeasure ), TI.PMC ( baseMeasure ) )
+
+	/// Change %, MTD vs the whole previous month (XU MTDOPMC %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.MTDOPMCPct (XU name). Always compares with the whole previous period
+	function 'TI.MTDvsFullPMPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.MTD ( baseMeasure ), TI.PMC ( baseMeasure ) )
+
+	/// Change, QTD vs the whole previous quarter (XU QTDOPQC Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.QTDOPQC (XU name). Always compares with the whole previous period
+	function 'TI.QTDvsFullPQ' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.QTD ( baseMeasure ), TI.PQC ( baseMeasure ) )
+
+	/// Change %, QTD vs the whole previous quarter (XU QTDOPQC %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.QTDOPQCPct (XU name). Always compares with the whole previous period
+	function 'TI.QTDvsFullPQPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.QTD ( baseMeasure ), TI.PQC ( baseMeasure ) )
+
+	/// Change, YTD vs the whole previous year (XU YTDOPYC Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YTDOPYC (XU name). Always compares with the whole previous period
+	function 'TI.YTDvsFullPY' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.YTD ( baseMeasure ), TI.PYC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, YTD vs the whole previous year (XU YTDOPYC %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	/// 2026-10-31 renamed from TI.YTDOPYCPct (XU name). Always compares with the whole previous period
+	function 'TI.YTDvsFullPYPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.YTD ( baseMeasure ), TI.PYC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, same period vs one month back (XU MOM Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.MOM' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.MTD ( baseMeasure ), TI.PM ( baseMeasure ) )    -- 2026-10-31 changed: TI.MTD as in CG MOM; before, baseMeasure compared a Year total with one month
+
+	/// Change %, same period vs one month back (XU MOM %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.MOMPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.MTD ( baseMeasure ), TI.PM ( baseMeasure ) )    -- 2026-10-31 changed: TI.MTD as in CG MOM; before, baseMeasure compared a Year total with one month
+
+	/// Change, same period vs one quarter back (XU QOQ Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.QOQ' =
+			( baseMeasure : EXPR ) =>
+			TI.Change ( TI.QTD ( baseMeasure ), TI.PQ ( baseMeasure ) )    -- 2026-10-31 changed: TI.QTD as in CG QOQ; before, baseMeasure compared a Year total with one quarter
+
+	/// Change %, same period vs one quarter back (XU QOQ %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.QOQPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePct ( TI.QTD ( baseMeasure ), TI.PQ ( baseMeasure ) )    -- 2026-10-31 changed: TI.QTD as in CG QOQ; before, baseMeasure compared a Year total with one quarter
+
+	/// Change, same period vs previous year (XU YOY Δ)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.YOY' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( baseMeasure, TI.PY ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, same period vs previous year (XU YOY %)
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.YOYPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( baseMeasure, TI.PY ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, MTD vs the whole same month previous year
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.MTDvsFullPYM' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.MTD ( baseMeasure ), TI.PYMC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, MTD vs the whole same month previous year
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.MTDvsFullPYMPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.MTD ( baseMeasure ), TI.PYMC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change, QTD vs the whole same quarter previous year
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.QTDvsFullPYQ' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangeIfBoth ( TI.QTD ( baseMeasure ), TI.PYQC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year
+
+	/// Change %, QTD vs the whole same quarter previous year
+	/// @param {EXPR} baseMeasure - the measure, e.g. [Sales Amount]
+	function 'TI.QTDvsFullPYQPct' =
+			( baseMeasure : EXPR ) =>
+			TI.ChangePctIfBoth ( TI.QTD ( baseMeasure ), TI.PYQC ( baseMeasure ) )    -- 2026-10-31 changed: blank also when the current value is blank (CG YOY pattern); before, a period without data showed minus last year

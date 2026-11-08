@@ -1,0 +1,135 @@
+{
+  "description": "Reference language switcher table for every He / En report (user 2026-10-30, model of ClientB Inventory Coverage / Sales Channels). Table hidden (BP_CT_LANGUAGE_HIDDEN); [Selected Culture] feeds label measures (COALESCE ( [Selected Culture], USERCULTURE () )) and field parameters with rows per language (FP_X[Culture] many -> CT_Language[Culture] one, single direction). Apply: add the table via TOM (JsonSerializer.DeserializeObject<Table>) or TE, RequestRefresh(Calculate) on it (DATATABLE, no source), then paste reportFilter into report.json filterConfig.filters (give it a new 20-char hex \"name\"). Recipe: PBIP_Recipes.md \"Recipe: report translation En / He\" + \"Measure column headers per language\". Change log: 2026-10-30 created.",
+  "tables": [
+    {
+      "name": "CT_Language",
+      "isHidden": true,
+      "columns": [
+        {
+          "type": "calculatedTableColumn",
+          "name": "Language_long",
+          "dataType": "string",
+          "sourceColumn": "[Language_long]",
+          "summarizeBy": "none",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Language",
+          "dataType": "string",
+          "sourceColumn": "[Language]",
+          "summarizeBy": "none",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Culture",
+          "dataType": "string",
+          "sourceColumn": "[Culture]",
+          "summarizeBy": "none",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        }
+      ],
+      "partitions": [
+        {
+          "name": "CT_Language",
+          "source": {
+            "type": "calculated",
+            "expression": "\nDATATABLE (\n    \"Language_long\", STRING,\n    \"Language\",      STRING,\n    \"Culture\",       STRING,\n    {\n        { \"English\", \"En\", \"en-US\" },\n        { \"Hebrew\",  \"He\", \"he-IL\" }\n    }\n)"
+          }
+        }
+      ],
+      "measures": [
+        {
+          "name": "Selected Culture",
+          "expression": "\nSELECTEDVALUE ( 'CT_Language'[Culture] )",
+          "isHidden": true,
+          "dataType": "string"
+        }
+      ]
+    }
+  ],
+  "reportFilter": {
+    "field": {
+      "Column": {
+        "Expression": {
+          "SourceRef": {
+            "Entity": "CT_Language"
+          }
+        },
+        "Property": "Language"
+      }
+    },
+    "type": "Categorical",
+    "filter": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "c",
+          "Entity": "CT_Language",
+          "Type": 0
+        }
+      ],
+      "Where": [
+        {
+          "Condition": {
+            "In": {
+              "Expressions": [
+                {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Source": "c"
+                      }
+                    },
+                    "Property": "Language"
+                  }
+                }
+              ],
+              "Values": [
+                [
+                  {
+                    "Literal": {
+                      "Value": "'He'"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "howCreated": "User",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "requireSingleSelect": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

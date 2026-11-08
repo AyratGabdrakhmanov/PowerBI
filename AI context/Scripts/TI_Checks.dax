@@ -1,0 +1,190 @@
+// TI_Checks.dax
+// Time intelligence checks: calendar health (check 1) and TI arithmetic (check 6).
+// Run against the open model: QueryOpenModel.ps1 -QueryFile TI_Checks.dax -Port <port>
+// Written for "TI UDF Sample" (DAX PRO Solutions). For another model replace
+// CT_Sales[Date] (fact date column) and the measure names, keep 'Calendar'[Date].
+// Every row: Pass = TRUE expected. LY / LLY = the last two complete years.
+//
+// Change log
+// 2026-10-31  TI.PQ / TI.QOQ on the CG DATESQTD pattern: 6.10 -> Jan-Feb, tests 8.08-8.10.
+// 2026-10-31  Tests 6.26-6.30: year comparisons blank without current data (TI.ChangeIfBoth / TI.ChangePctIfBoth).
+// 2026-10-31  Tests 6.21-6.25: TI.PYQC, TI.MTDvsFullPYM, TI.QTDvsFullPYQ (+Pct).
+// 2026-10-31  Tests 6.19-6.20: TI.DTD with MAX instead of LASTDATE.
+// 2026-10-31  Section 8 rewritten: month functions on Year / Quarter totals = last month in context (guard removed, TI.PM uses DATESMTD).
+// 2026-10-31  Section 8: TI.PM / PMC / MOM / MTDvsFullPM / MODLY blank above month level; renamed TD / Full comparison functions.
+// 2026-10-31  Section 7: 30 UDF wrappers (TI.MAT, TI.PYMAT, TI.<cmp> / TI.<cmp>Pct) vs reference measures.
+// 2026-10-31  Tests 6.15-6.18: TI.PYCN, TI.YTDToMonth (DAX Lib StoryBi / EG packages).
+// 2026-10-31  Created (SQLBI rules + XU.TMDL.TimeIntelligence coverage).
+
+DEFINE
+    VAR __LY  = YEAR ( TODAY () ) - 1
+    VAR __LLY = YEAR ( TODAY () ) - 2
+    VAR __CalMin  = CALCULATE ( MIN ( 'Calendar'[Date] ), REMOVEFILTERS () )
+    VAR __CalMax  = CALCULATE ( MAX ( 'Calendar'[Date] ), REMOVEFILTERS () )
+    VAR __CalRows = CALCULATE ( COUNTROWS ( 'Calendar' ), REMOVEFILTERS () )
+    VAR __FactMin = CALCULATE ( MIN ( CT_Sales[Date] ), REMOVEFILTERS () )
+    VAR __FactMax = CALCULATE ( MAX ( CT_Sales[Date] ), REMOVEFILTERS () )
+    VAR __IsMarked =
+        COUNTROWS (
+            FILTER (
+                INFO.TABLES ()
+                , [Name] = "Calendar"
+                    && [DataCategory] = "Time"
+            )
+        ) = 1
+    VAR __SalesLY    = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 1, 1 ), DATE ( __LY, 12, 31 ) ) )
+    VAR __SalesLLY   = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LLY, 1, 1 ), DATE ( __LLY, 12, 31 ) ) )
+    VAR __SalesFebLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 2, 1 ), EOMONTH ( DATE ( __LY, 2, 1 ), 0 ) ) )
+    VAR __SalesQ1LY  = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 1, 1 ), DATE ( __LY, 3, 31 ) ) )
+    VAR __YearLY  = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 1, 1 ), DATE ( __LY, 12, 31 ) )
+    VAR __DecLY   = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 12, 1 ), DATE ( __LY, 12, 31 ) )
+    VAR __MarLY   = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 3, 1 ), DATE ( __LY, 3, 31 ) )
+    VAR __MayLY   = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 5, 1 ), DATE ( __LY, 5, 31 ) )
+    VAR __Q2LY    = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 4, 1 ), DATE ( __LY, 6, 30 ) )
+    VAR __JanLY   = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 1, 1 ), DATE ( __LY, 1, 31 ) )
+    VAR __MarCY   = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY + 1, 3, 1 ), DATE ( __LY + 1, 3, 31 ) )
+    VAR __SalesJanLY = CALCULATE ( [Sales Amount], __JanLY )
+    VAR __SalesMarLY = CALCULATE ( [Sales Amount], __MarLY )
+    VAR __SalesMayLY = CALCULATE ( [Sales Amount], __MayLY )
+    VAR __SalesJanFebLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 1, 1 ), EOMONTH ( DATE ( __LY, 2, 1 ), 0 ) ) )
+    VAR __SalesQ3LY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 7, 1 ), DATE ( __LY, 9, 30 ) ) )
+    VAR __SalesAprMayLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 4, 1 ), DATE ( __LY, 5, 31 ) ) )
+    VAR __SalesQ4LY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 10, 1 ), DATE ( __LY, 12, 31 ) ) )
+    VAR __Mar15LY = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 3, 1 ), DATE ( __LY, 3, 15 ) )
+    VAR __Q2To15MayLY = DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 4, 1 ), DATE ( __LY, 5, 15 ) )
+    VAR __SalesMar15LY = CALCULATE ( [Sales Amount], __Mar15LY )
+    VAR __SalesQ2To15MayLY = CALCULATE ( [Sales Amount], __Q2To15MayLY )
+    VAR __SalesMarLLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LLY, 3, 1 ), DATE ( __LLY, 3, 31 ) ) )
+    VAR __SalesQ2LLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LLY, 4, 1 ), DATE ( __LLY, 6, 30 ) ) )
+    VAR __SalesNovLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY, 11, 1 ), DATE ( __LY, 11, 30 ) ) )
+    VAR __SalesDecLY = CALCULATE ( [Sales Amount], __DecLY )
+    VAR __SalesDecLLY = CALCULATE ( [Sales Amount], DATESBETWEEN ( 'Calendar'[Date], DATE ( __LLY, 12, 1 ), DATE ( __LLY, 12, 31 ) ) )
+    VAR __ThisMonth = DATESBETWEEN ( 'Calendar'[Date], EOMONTH ( TODAY (), -1 ) + 1, EOMONTH ( TODAY (), 0 ) )
+    VAR __NextMonth = DATESBETWEEN ( 'Calendar'[Date], EOMONTH ( TODAY (), 0 ) + 1, EOMONTH ( TODAY (), 1 ) )
+
+EVALUATE
+VAR __Tests =
+    {
+        // --- 1. Calendar health ---
+        ( "1.1 Calendar marked as date table",          1,                                 INT ( __IsMarked ) )
+        , ( "1.2 Calendar has no gaps (rows = days)",   INT ( __CalMax - __CalMin ) + 1,   __CalRows )
+        , ( "1.3 Calendar starts on 1 Jan",             1,                                 INT ( DAY ( __CalMin ) = 1 && MONTH ( __CalMin ) = 1 ) )
+        , ( "1.4 Calendar ends on 31 Dec",              1,                                 INT ( DAY ( __CalMax ) = 31 && MONTH ( __CalMax ) = 12 ) )
+        , ( "1.5 Fact dates inside the Calendar",       1,                                 INT ( __FactMin >= __CalMin && __FactMax <= __CalMax ) )
+        // --- 6. TI arithmetic ---
+        , ( "6.01 YTD at Dec LY = LY total",            __SalesLY,                         CALCULATE ( [Sales YTD], __DecLY ) )
+        , ( "6.02 R12 at Dec LY = LY total",            __SalesLY,                         CALCULATE ( [Sales R12], __DecLY ) )
+        , ( "6.03 PY of LY = LLY total",                __SalesLLY,                        CALCULATE ( [Sales PY], __YearLY ) )
+        , ( "6.04 PYC in Mar LY = LLY total",           __SalesLLY,                        CALCULATE ( [Sales PYC], __MarLY ) )
+        , ( "6.05 PYTD at Dec LY = LLY total",          __SalesLLY,                        CALCULATE ( [Sales PYTD], __DecLY ) )
+        , ( "6.06 Prev R12 at Dec LY = LLY total",      __SalesLLY,                        CALCULATE ( [Sales Prev R12], __DecLY ) )
+        , ( "6.07 YOY Change of LY = LY - LLY",         __SalesLY - __SalesLLY,            CALCULATE ( [Sales YOY Change], __YearLY ) )
+        , ( "6.08 YOY Change % of LY",                  DIVIDE ( __SalesLY - __SalesLLY, ABS ( __SalesLLY ) ), CALCULATE ( [Sales YOY Change %], __YearLY ) )
+        , ( "6.09 PM in Mar LY = Feb LY",               __SalesFebLY,                      CALCULATE ( [Sales PM], __MarLY ) )
+        , ( "6.10 PQ in May LY = Jan-Feb LY",           __SalesJanFebLY,                   CALCULATE ( [Sales PQ], __MayLY ) )
+        , ( "6.11 PQC in Q2 LY = Q1 LY",                __SalesQ1LY,                       CALCULATE ( [Sales PQC], __Q2LY ) )
+        , ( "6.12 R12 YOY Change at Dec LY",            __SalesLY - __SalesLLY,            CALCULATE ( [Sales R12 YOY Change], __DecLY ) )
+        , ( "6.13 YTD Hide Future = YTD this month",    CALCULATE ( [Sales YTD], __ThisMonth ), CALCULATE ( [Sales YTD Hide Future], __ThisMonth ) )
+        , ( "6.14 YTD Hide Future blank next month",    BLANK (),                          CALCULATE ( [Sales YTD Hide Future], __NextMonth ) )
+        , ( "6.15 PYC 2Y in Mar this year = LLY total", __SalesLLY,                        CALCULATE ( [Sales PYC 2Y], __MarCY ) )
+        , ( "6.16 YTD To Month in Jan LY = Jan LY",     __SalesJanLY,                      CALCULATE ( [Sales YTD To Month], __JanLY ) )
+        , ( "6.17 YTD To Month in Mar LY = Mar LY",     __SalesMarLY,                      CALCULATE ( [Sales YTD To Month], __MarLY ) )
+        , ( "6.18 YTD To Month of LY = LY total",       __SalesLY,                         CALCULATE ( [Sales YTD To Month], __YearLY ) )
+        , ( "6.19 TI.DTD in Mar LY = sales on 31 Mar LY", CALCULATE ( [Sales Amount], 'Calendar'[Date] = DATE ( __LY, 3, 31 ) ), CALCULATE ( TI.DTD ( [Sales Amount] ), __MarLY ) )
+        , ( "6.20 TI.DTD = LASTDATE version on Year LY", CALCULATE ( CALCULATE ( [Sales Amount], LASTDATE ( 'Calendar'[Date] ) ), __YearLY ), CALCULATE ( TI.DTD ( [Sales Amount] ), __YearLY ) )
+        , ( "6.21 TI.PYQC in May LY = Q2 LLY",               __SalesQ2LLY,                   CALCULATE ( TI.PYQC ( [Sales Amount] ), __MayLY ) )
+        , ( "6.22 TI.MTDvsFullPYM 1-15 Mar LY vs full Mar LLY", __SalesMar15LY - __SalesMarLLY, CALCULATE ( TI.MTDvsFullPYM ( [Sales Amount] ), __Mar15LY ) )
+        , ( "6.23 TI.MTDvsFullPYMPct",                      DIVIDE ( __SalesMar15LY - __SalesMarLLY, ABS ( __SalesMarLLY ) ), CALCULATE ( TI.MTDvsFullPYMPct ( [Sales Amount] ), __Mar15LY ) )
+        , ( "6.24 TI.QTDvsFullPYQ 1 Apr-15 May LY vs full Q2 LLY", __SalesQ2To15MayLY - __SalesQ2LLY, CALCULATE ( TI.QTDvsFullPYQ ( [Sales Amount] ), __Q2To15MayLY ) )
+        , ( "6.25 TI.QTDvsFullPYQPct",                      DIVIDE ( __SalesQ2To15MayLY - __SalesQ2LLY, ABS ( __SalesQ2LLY ) ), CALCULATE ( TI.QTDvsFullPYQPct ( [Sales Amount] ), __Q2To15MayLY ) )
+        , ( "6.26 TI.YOY blank next month (no data)", BLANK (), CALCULATE ( TI.YOY ( [Sales Amount] ), __NextMonth ) )
+        , ( "6.27 TI.YOYPct blank next month (no data)", BLANK (), CALCULATE ( TI.YOYPct ( [Sales Amount] ), __NextMonth ) )
+        , ( "6.28 TI.MTDvsPYMTD blank next month (no data)", BLANK (), CALCULATE ( TI.MTDvsPYMTD ( [Sales Amount] ), __NextMonth ) )
+        , ( "6.29 TI.YTDvsFullPY blank in Jan next year (no YTD)", BLANK (), CALCULATE ( TI.YTDvsFullPY ( [Sales Amount] ), DATESBETWEEN ( 'Calendar'[Date], DATE ( __LY + 2, 1, 1 ), DATE ( __LY + 2, 1, 31 ) ) ) )
+        , ( "6.30 TI.YOY this month = this month - same month LY", CALCULATE ( [Sales Amount], __ThisMonth ) - CALCULATE ( [Sales Amount], DATEADD ( __ThisMonth, -1, YEAR ) ), CALCULATE ( TI.YOY ( [Sales Amount] ), __ThisMonth ) )
+        // --- 7. UDF wrappers = reference measures ---
+        , ( "7.01 TI.MAT = [Sales R12] MarLY", CALCULATE ( [Sales R12], __MarLY ), CALCULATE ( TI.MAT ( [Sales Amount] ), __MarLY ) )
+        , ( "7.01 TI.MAT = [Sales R12] DecLY", CALCULATE ( [Sales R12], __DecLY ), CALCULATE ( TI.MAT ( [Sales Amount] ), __DecLY ) )
+        , ( "7.02 TI.PYMAT = [Sales Prev R12] MarLY", CALCULATE ( [Sales Prev R12], __MarLY ), CALCULATE ( TI.PYMAT ( [Sales Amount] ), __MarLY ) )
+        , ( "7.02 TI.PYMAT = [Sales Prev R12] DecLY", CALCULATE ( [Sales Prev R12], __DecLY ), CALCULATE ( TI.PYMAT ( [Sales Amount] ), __DecLY ) )
+        , ( "7.03 TI.YOY = [Sales YOY Change] MarLY", CALCULATE ( [Sales YOY Change], __MarLY ), CALCULATE ( TI.YOY ( [Sales Amount] ), __MarLY ) )
+        , ( "7.03 TI.YOY = [Sales YOY Change] DecLY", CALCULATE ( [Sales YOY Change], __DecLY ), CALCULATE ( TI.YOY ( [Sales Amount] ), __DecLY ) )
+        , ( "7.04 TI.YOYPct = [Sales YOY Change %] MarLY", CALCULATE ( [Sales YOY Change %], __MarLY ), CALCULATE ( TI.YOYPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.04 TI.YOYPct = [Sales YOY Change %] DecLY", CALCULATE ( [Sales YOY Change %], __DecLY ), CALCULATE ( TI.YOYPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.05 TI.QOQ = [Sales QOQ Change] MarLY", CALCULATE ( [Sales QOQ Change], __MarLY ), CALCULATE ( TI.QOQ ( [Sales Amount] ), __MarLY ) )
+        , ( "7.05 TI.QOQ = [Sales QOQ Change] DecLY", CALCULATE ( [Sales QOQ Change], __DecLY ), CALCULATE ( TI.QOQ ( [Sales Amount] ), __DecLY ) )
+        , ( "7.06 TI.QOQPct = [Sales QOQ Change %] MarLY", CALCULATE ( [Sales QOQ Change %], __MarLY ), CALCULATE ( TI.QOQPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.06 TI.QOQPct = [Sales QOQ Change %] DecLY", CALCULATE ( [Sales QOQ Change %], __DecLY ), CALCULATE ( TI.QOQPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.07 TI.MOM = [Sales MOM Change] MarLY", CALCULATE ( [Sales MOM Change], __MarLY ), CALCULATE ( TI.MOM ( [Sales Amount] ), __MarLY ) )
+        , ( "7.07 TI.MOM = [Sales MOM Change] DecLY", CALCULATE ( [Sales MOM Change], __DecLY ), CALCULATE ( TI.MOM ( [Sales Amount] ), __DecLY ) )
+        , ( "7.08 TI.MOMPct = [Sales MOM Change %] MarLY", CALCULATE ( [Sales MOM Change %], __MarLY ), CALCULATE ( TI.MOMPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.08 TI.MOMPct = [Sales MOM Change %] DecLY", CALCULATE ( [Sales MOM Change %], __DecLY ), CALCULATE ( TI.MOMPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.09 TI.YTDvsPYTD = [Sales YOYTD Change] MarLY", CALCULATE ( [Sales YOYTD Change], __MarLY ), CALCULATE ( TI.YTDvsPYTD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.09 TI.YTDvsPYTD = [Sales YOYTD Change] DecLY", CALCULATE ( [Sales YOYTD Change], __DecLY ), CALCULATE ( TI.YTDvsPYTD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.10 TI.YTDvsPYTDPct = [Sales YOYTD Change %] MarLY", CALCULATE ( [Sales YOYTD Change %], __MarLY ), CALCULATE ( TI.YTDvsPYTDPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.10 TI.YTDvsPYTDPct = [Sales YOYTD Change %] DecLY", CALCULATE ( [Sales YOYTD Change %], __DecLY ), CALCULATE ( TI.YTDvsPYTDPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.11 TI.QTDvsPQTD = [Sales QOQTD Change] MarLY", CALCULATE ( [Sales QOQTD Change], __MarLY ), CALCULATE ( TI.QTDvsPQTD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.11 TI.QTDvsPQTD = [Sales QOQTD Change] DecLY", CALCULATE ( [Sales QOQTD Change], __DecLY ), CALCULATE ( TI.QTDvsPQTD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.12 TI.QTDvsPQTDPct = [Sales QOQTD Change %] MarLY", CALCULATE ( [Sales QOQTD Change %], __MarLY ), CALCULATE ( TI.QTDvsPQTDPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.12 TI.QTDvsPQTDPct = [Sales QOQTD Change %] DecLY", CALCULATE ( [Sales QOQTD Change %], __DecLY ), CALCULATE ( TI.QTDvsPQTDPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.13 TI.MTDvsPMTD = [Sales MOMTD Change] MarLY", CALCULATE ( [Sales MOMTD Change], __MarLY ), CALCULATE ( TI.MTDvsPMTD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.13 TI.MTDvsPMTD = [Sales MOMTD Change] DecLY", CALCULATE ( [Sales MOMTD Change], __DecLY ), CALCULATE ( TI.MTDvsPMTD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.14 TI.MTDvsPMTDPct = [Sales MOMTD Change %] MarLY", CALCULATE ( [Sales MOMTD Change %], __MarLY ), CALCULATE ( TI.MTDvsPMTDPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.14 TI.MTDvsPMTDPct = [Sales MOMTD Change %] DecLY", CALCULATE ( [Sales MOMTD Change %], __DecLY ), CALCULATE ( TI.MTDvsPMTDPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.15 TI.QTDvsPYQTD = [Sales YOQTD Change] MarLY", CALCULATE ( [Sales YOQTD Change], __MarLY ), CALCULATE ( TI.QTDvsPYQTD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.15 TI.QTDvsPYQTD = [Sales YOQTD Change] DecLY", CALCULATE ( [Sales YOQTD Change], __DecLY ), CALCULATE ( TI.QTDvsPYQTD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.16 TI.QTDvsPYQTDPct = [Sales YOQTD Change %] MarLY", CALCULATE ( [Sales YOQTD Change %], __MarLY ), CALCULATE ( TI.QTDvsPYQTDPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.16 TI.QTDvsPYQTDPct = [Sales YOQTD Change %] DecLY", CALCULATE ( [Sales YOQTD Change %], __DecLY ), CALCULATE ( TI.QTDvsPYQTDPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.17 TI.MTDvsPYMTD = [Sales YOMTD Change] MarLY", CALCULATE ( [Sales YOMTD Change], __MarLY ), CALCULATE ( TI.MTDvsPYMTD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.17 TI.MTDvsPYMTD = [Sales YOMTD Change] DecLY", CALCULATE ( [Sales YOMTD Change], __DecLY ), CALCULATE ( TI.MTDvsPYMTD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.18 TI.MTDvsPYMTDPct = [Sales YOMTD Change %] MarLY", CALCULATE ( [Sales YOMTD Change %], __MarLY ), CALCULATE ( TI.MTDvsPYMTDPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.18 TI.MTDvsPYMTDPct = [Sales YOMTD Change %] DecLY", CALCULATE ( [Sales YOMTD Change %], __DecLY ), CALCULATE ( TI.MTDvsPYMTDPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.19 TI.DOD = [Sales DOD Change] MarLY", CALCULATE ( [Sales DOD Change], __MarLY ), CALCULATE ( TI.DOD ( [Sales Amount] ), __MarLY ) )
+        , ( "7.19 TI.DOD = [Sales DOD Change] DecLY", CALCULATE ( [Sales DOD Change], __DecLY ), CALCULATE ( TI.DOD ( [Sales Amount] ), __DecLY ) )
+        , ( "7.20 TI.DODPct = [Sales DOD Change %] MarLY", CALCULATE ( [Sales DOD Change %], __MarLY ), CALCULATE ( TI.DODPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.20 TI.DODPct = [Sales DOD Change %] DecLY", CALCULATE ( [Sales DOD Change %], __DecLY ), CALCULATE ( TI.DODPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.21 TI.MODLY = [Sales MODLY Change] MarLY", CALCULATE ( [Sales MODLY Change], __MarLY ), CALCULATE ( TI.MODLY ( [Sales Amount] ), __MarLY ) )
+        , ( "7.21 TI.MODLY = [Sales MODLY Change] DecLY", CALCULATE ( [Sales MODLY Change], __DecLY ), CALCULATE ( TI.MODLY ( [Sales Amount] ), __DecLY ) )
+        , ( "7.22 TI.MODLYPct = [Sales MODLY Change %] MarLY", CALCULATE ( [Sales MODLY Change %], __MarLY ), CALCULATE ( TI.MODLYPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.22 TI.MODLYPct = [Sales MODLY Change %] DecLY", CALCULATE ( [Sales MODLY Change %], __DecLY ), CALCULATE ( TI.MODLYPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.23 TI.YTDvsFullPY = [Sales YTD vs PYC Change] MarLY", CALCULATE ( [Sales YTD vs PYC Change], __MarLY ), CALCULATE ( TI.YTDvsFullPY ( [Sales Amount] ), __MarLY ) )
+        , ( "7.23 TI.YTDvsFullPY = [Sales YTD vs PYC Change] DecLY", CALCULATE ( [Sales YTD vs PYC Change], __DecLY ), CALCULATE ( TI.YTDvsFullPY ( [Sales Amount] ), __DecLY ) )
+        , ( "7.24 TI.YTDvsFullPYPct = [Sales YTD vs PYC Change %] MarLY", CALCULATE ( [Sales YTD vs PYC Change %], __MarLY ), CALCULATE ( TI.YTDvsFullPYPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.24 TI.YTDvsFullPYPct = [Sales YTD vs PYC Change %] DecLY", CALCULATE ( [Sales YTD vs PYC Change %], __DecLY ), CALCULATE ( TI.YTDvsFullPYPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.25 TI.QTDvsFullPQ = [Sales QTD vs PQC Change] MarLY", CALCULATE ( [Sales QTD vs PQC Change], __MarLY ), CALCULATE ( TI.QTDvsFullPQ ( [Sales Amount] ), __MarLY ) )
+        , ( "7.25 TI.QTDvsFullPQ = [Sales QTD vs PQC Change] DecLY", CALCULATE ( [Sales QTD vs PQC Change], __DecLY ), CALCULATE ( TI.QTDvsFullPQ ( [Sales Amount] ), __DecLY ) )
+        , ( "7.26 TI.QTDvsFullPQPct = [Sales QTD vs PQC Change %] MarLY", CALCULATE ( [Sales QTD vs PQC Change %], __MarLY ), CALCULATE ( TI.QTDvsFullPQPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.26 TI.QTDvsFullPQPct = [Sales QTD vs PQC Change %] DecLY", CALCULATE ( [Sales QTD vs PQC Change %], __DecLY ), CALCULATE ( TI.QTDvsFullPQPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.27 TI.MTDvsFullPM = [Sales MTD vs PMC Change] MarLY", CALCULATE ( [Sales MTD vs PMC Change], __MarLY ), CALCULATE ( TI.MTDvsFullPM ( [Sales Amount] ), __MarLY ) )
+        , ( "7.27 TI.MTDvsFullPM = [Sales MTD vs PMC Change] DecLY", CALCULATE ( [Sales MTD vs PMC Change], __DecLY ), CALCULATE ( TI.MTDvsFullPM ( [Sales Amount] ), __DecLY ) )
+        , ( "7.28 TI.MTDvsFullPMPct = [Sales MTD vs PMC Change %] MarLY", CALCULATE ( [Sales MTD vs PMC Change %], __MarLY ), CALCULATE ( TI.MTDvsFullPMPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.28 TI.MTDvsFullPMPct = [Sales MTD vs PMC Change %] DecLY", CALCULATE ( [Sales MTD vs PMC Change %], __DecLY ), CALCULATE ( TI.MTDvsFullPMPct ( [Sales Amount] ), __DecLY ) )
+        , ( "7.29 TI.MATG = [Sales R12 YOY Change] MarLY", CALCULATE ( [Sales R12 YOY Change], __MarLY ), CALCULATE ( TI.MATG ( [Sales Amount] ), __MarLY ) )
+        , ( "7.29 TI.MATG = [Sales R12 YOY Change] DecLY", CALCULATE ( [Sales R12 YOY Change], __DecLY ), CALCULATE ( TI.MATG ( [Sales Amount] ), __DecLY ) )
+        , ( "7.30 TI.MATGPct = [Sales R12 YOY Change %] MarLY", CALCULATE ( [Sales R12 YOY Change %], __MarLY ), CALCULATE ( TI.MATGPct ( [Sales Amount] ), __MarLY ) )
+        , ( "7.30 TI.MATGPct = [Sales R12 YOY Change %] DecLY", CALCULATE ( [Sales R12 YOY Change %], __DecLY ), CALCULATE ( TI.MATGPct ( [Sales Amount] ), __DecLY ) )
+        // --- 8. Month functions on Year / Quarter totals = last month in context (DATESMTD) ---
+        , ( "8.01 TI.PM on Year LY = Nov LY",            __SalesNovLY,                 CALCULATE ( TI.PM ( [Sales Amount] ), __YearLY ) )
+        , ( "8.02 TI.PMC on Year LY = Nov LY",           __SalesNovLY,                 CALCULATE ( TI.PMC ( [Sales Amount] ), __YearLY ) )
+        , ( "8.03 TI.MOM on Year LY = Dec - Nov LY",     __SalesDecLY - __SalesNovLY,  CALCULATE ( TI.MOM ( [Sales Amount] ), __YearLY ) )
+        , ( "8.04 TI.MTDvsFullPM on Year LY",           __SalesDecLY - __SalesNovLY,  CALCULATE ( TI.MTDvsFullPM ( [Sales Amount] ), __YearLY ) )
+        , ( "8.05 TI.MODLY on Year LY = Dec LY - Dec LLY", __SalesDecLY - __SalesDecLLY, CALCULATE ( TI.MODLY ( [Sales Amount] ), __YearLY ) )
+        , ( "8.06 TI.PM on Q2 LY = May LY",              __SalesMayLY,                 CALCULATE ( TI.PM ( [Sales Amount] ), __Q2LY ) )
+        , ( "8.07 TI.PMC on Q2 LY = May LY",             __SalesMayLY,                 CALCULATE ( TI.PMC ( [Sales Amount] ), __Q2LY ) )
+        , ( "8.08 TI.PQ on Year LY = Q3 LY",             __SalesQ3LY,                  CALCULATE ( TI.PQ ( [Sales Amount] ), __YearLY ) )
+        , ( "8.09 TI.QOQ on Year LY = Q4 - Q3 LY",       __SalesQ4LY - __SalesQ3LY,    CALCULATE ( TI.QOQ ( [Sales Amount] ), __YearLY ) )
+        , ( "8.10 TI.QOQ in May LY = Apr-May - Jan-Feb", __SalesAprMayLY - __SalesJanFebLY, CALCULATE ( TI.QOQ ( [Sales Amount] ), __MayLY ) )
+    }
+RETURN
+    SELECTCOLUMNS (
+        __Tests
+        , "Test",     [Value1]
+        , "Expected", [Value2]
+        , "Actual",   [Value3]
+        , "Pass",
+            IF (
+                ISBLANK ( [Value2] )
+                , ISBLANK ( [Value3] )
+                , NOT ISBLANK ( [Value3] ) && ABS ( [Value2] - [Value3] ) < 0.0001
+            )
+    )

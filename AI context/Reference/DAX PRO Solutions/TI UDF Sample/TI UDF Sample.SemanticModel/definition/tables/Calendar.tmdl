@@ -1,0 +1,384 @@
+table Calendar
+	lineageTag: d53e8319-11a5-4144-9fe9-a11f8332a9a1
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy ddd
+		lineageTag: e33f4bd0-5f2f-4e14-a266-96dfd3e389dd
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 91f2e3a7-199f-4a70-bc5c-eaa1897f9fcf
+		summarizeBy: none
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = User
+
+	column 'Closed Period'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b0d6e07b-ef34-4a24-ba43-0acdb072610a
+		summarizeBy: none
+		sourceColumn: [Closed Period]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year ID'
+		dataType: int64
+		formatString: #,0
+		lineageTag: da81498e-e86d-4cd3-9ea6-f41292ef2d9a
+		summarizeBy: none
+		sourceColumn: [Year ID]
+
+		annotation SummarizationSetBy = User
+
+	column 'Year Date'
+		dataType: dateTime
+		formatString: yyyy
+		lineageTag: 80b7c948-45b5-4cc1-9f6b-9f37a7c99acb
+		summarizeBy: none
+		sourceColumn: [Year Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Quarter Name'
+		dataType: dateTime
+		formatString: \Qd
+		lineageTag: 4240ae22-a2c2-4333-84cc-3af62116173c
+		summarizeBy: none
+		sourceColumn: [Quarter Name]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Quarter ID'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4f6bf039-bddb-4ba3-96a5-73a3e456b7e3
+		summarizeBy: none
+		sourceColumn: [Quarter ID]
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Year'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: ac278676-350f-49a4-a745-a509af1707d8
+		summarizeBy: none
+		sourceColumn: [Month Year]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month Name'
+		dataType: dateTime
+		formatString: mmm
+		lineageTag: 103429d8-9005-4160-81fa-7c9689da43de
+		summarizeBy: none
+		sourceColumn: [Month Name]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month ID'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 8a17e7bd-b785-4e41-b3d3-dbc5a4fadefa
+		summarizeBy: none
+		sourceColumn: [Month ID]
+
+		annotation SummarizationSetBy = User
+
+	column IsWorking
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 00f80128-4991-461d-9eb6-37fac811ae10
+		summarizeBy: none
+		sourceColumn: [IsWorking]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ISO Week'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f895dfe-672c-4964-b6a2-b9cf18fd9c32
+		summarizeBy: none
+		sourceColumn: [ISO Week]
+
+		annotation SummarizationSetBy = User
+
+	column 'ISO Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: bc0ed180-35e3-412a-a448-0dd6271926f3
+		summarizeBy: none
+		sourceColumn: [ISO Year]
+
+		annotation SummarizationSetBy = User
+
+	column 'Half Of Year'
+		dataType: dateTime
+		formatString: \Hm - yyyy
+		lineageTag: 69c4c5c7-f0b0-44b0-b5bc-25e6da6fb124
+		summarizeBy: none
+		sourceColumn: [Half Of Year]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Quarter Year'
+		dataType: dateTime
+		formatString: yyyy \Qd
+		lineageTag: 9985909b-dae0-4c31-82f7-c66884892beb
+		summarizeBy: none
+		sourceColumn: [Quarter Year]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Working Day Of Year'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 2883d587-b31c-4fba-9399-fc5f0efc71a2
+		summarizeBy: none
+		sourceColumn: [Working Day Of Year]
+
+		annotation SummarizationSetBy = User
+
+	column 'Current Quarter'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6c60cec7-1b41-442c-9d08-9e8bf1639a6b
+		summarizeBy: none
+		sourceColumn: [Current Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Current Month'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: da00c2e1-7a39-41f9-bb37-fda866bb6c72
+		summarizeBy: none
+		sourceColumn: [Current Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ISO Week Date'
+		dataType: dateTime
+		formatString: \Ws dd mmm yy
+		lineageTag: bbc3e24e-021f-433a-82e7-08ba4ab2156e
+		summarizeBy: none
+		sourceColumn: [ISO Week Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'ISO Week ID'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 809bfbee-8be8-4c43-9738-6a32cd527e3d
+		summarizeBy: none
+		sourceColumn: [ISO Week ID]
+
+		annotation SummarizationSetBy = User
+
+	column 'ISO Week as Date'
+		dataType: dateTime
+		formatString: \Wnn: dd.mm - ss.hh
+		lineageTag: ef7525ba-a002-4a52-9a2a-2822afd3e35c
+		summarizeBy: none
+		sourceColumn: [ISO Week as Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Month Slicer'
+		dataType: dateTime
+		formatString: mmmm
+		lineageTag: 8f9e5ac2-b6bd-4598-a02f-d113931a7964
+		summarizeBy: none
+		sourceColumn: [Month Slicer]
+		sortByColumn: 'Month SortBack'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month SortBack'
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 2c336465-72ba-43a3-a049-30990c2ca85c
+		summarizeBy: none
+		sourceColumn: [Month SortBack]
+
+		annotation SummarizationSetBy = User
+
+	column Today
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6adeeda5-48a7-409b-a0c0-32a2bd0f741f
+		summarizeBy: none
+		sourceColumn: [Today]
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Year-Month
+		lineageTag: c6264a40-a35a-404b-9ed0-400192ff41d3
+
+		level ​
+			lineageTag: a21f0232-37f4-4305-a85c-3280f4891954
+			column: Year
+
+		level ​​
+			lineageTag: 91e2bf64-ff74-4fc4-8610-74efb89ef38d
+			column: 'Month Name'
+
+	hierarchy Year-Q-Month
+		lineageTag: 9e6aa2aa-3bb9-4f5b-bedb-30a89771509a
+
+		level ​
+			lineageTag: 2ed859a2-3e0f-412e-9c14-669417c3fe8e
+			column: Year
+
+		level ​​
+			lineageTag: 0a3738bf-f4ce-4745-a49d-45c88d7d521f
+			column: 'Quarter Name'
+
+		level ​​​
+			lineageTag: 3288f6f9-3b3d-4ba6-99f8-49d9dc97d740
+			column: 'Month Name'
+
+	hierarchy Year-Q-Month-Date
+		lineageTag: 45cc7310-0675-4dd2-b5fa-1eda913e343a
+
+		level ​
+			lineageTag: 6af8cff6-367b-45ef-9bb6-dd137aa344ad
+			column: Year
+
+		level ​​
+			lineageTag: ee9b0c1e-3297-400f-8193-c01229484b75
+			column: 'Quarter Name'
+
+		level ​​​
+			lineageTag: 4a404952-d751-4aa1-ac0c-831449b37f03
+			column: 'Month Name'
+
+		level ​​​​
+			lineageTag: 6f9c9da4-2531-4289-82b1-ddb36fae614c
+			column: Date
+
+	hierarchy 'Year-Month Slicer'
+		lineageTag: 36f214b9-b139-47fc-a6c4-ee3c66b394ca
+
+		level ​
+			lineageTag: aa74c750-1787-4136-a860-12056c0d0278
+			column: Year
+
+		level ​​
+			lineageTag: 37bc6a0d-5246-4f80-b76a-1ddaec448b9b
+			column: 'Month Slicer'
+
+	partition Calendar = calculated
+		mode: import
+		source = ```
+				
+				VAR __TodayDate = TODAY()
+				VAR __Dates =
+				    CALENDAR (
+				        DATE ( YEAR ( __TodayDate ) - 3, 01, 01 ),
+				        DATE ( YEAR ( __TodayDate ) + 3, 12, 31 )
+				    )
+				VAR __TodayMonday = __TodayDate - WEEKDAY ( __TodayDate, 2 ) + 1
+				
+				VAR __Result = 
+				    ADDCOLUMNS (
+				        __Dates                                                                 -- dd/mmm/yyyy ddd
+				            , "Year",             YEAR ( [Date] )   
+				            , "Year Date",        EOMONTH ( [Date], - MONTH ( [Date] ) ) + 1    -- yyyy           
+				            , "Year ID",          DATEDIFF ( __TodayDate, [Date], YEAR  )       -- 0 = Current Year, Negative => history, Positive => Future
+				
+				            , "Half Of Year",     DATE ( YEAR ( [Date] ), ROUNDDOWN ( ( MONTH ( [Date] ) - 1 ) / 6, 0 ) + 1, 1 )                -- \Hm - yyyy
+				
+				            , "Quarter Year",     DATE ( YEAR ( [Date] ), ( QUARTER ( [Date] ) - 1 ) * 3 + 1, QUARTER ( [Date] ) )              -- yyyy \Qd
+				            , "Quarter Name",     DATE ( YEAR ( [Date] ), ( QUARTER ( [Date] ) - 1 ) * 3 + 1, QUARTER ( [Date] ) )              -- \Qd
+				            , "Quarter ID",       DATEDIFF ( __TodayDate, [Date], QUARTER  )                                                    -- 0 = Current Quarter, Negative => history, Positive => Future
+				            , "Current Quarter",  QUARTER ( [Date] ) = QUARTER ( __TodayDate ) && YEAR ( [Date] ) = YEAR ( __TodayDate )        -- OR  "Quarter ID" = 0
+				
+				            , "Month Year",       EOMONTH ( [Date], -1 ) +1                             -- mmm yyyy
+				            , "Month Name",       EOMONTH ( [Date], -1 ) +1                             -- mmm
+				            , "Month Slicer",     EOMONTH ( [Date], -1 ) +1                             -- mmmm, sorted by Month SortBack
+				            , "Month ID",         DATEDIFF ( __TodayDate, [Date], MONTH )               -- 0 = Current Month, Negative => history, Positive => Future
+				            , "Month SortBack",   DATEDIFF ( __TodayDate, [Date], MONTH ) * ( -1 )      -- to have Recent Month upper in the slicers. Drawback: it's sorting column
+				            , "Current Month",    EOMONTH ( [Date], 0 ) = EOMONTH ( __TodayDate, 0 )    -- OR  "Month ID" = 0
+				
+				            , "IsWorking",        NOT WEEKDAY ( [Date], 2 ) IN { 5, 6 }                 -- Weekends: Friday, Saturday
+				            , "Working Day Of Year",
+				                    VAR __CurrentYear = YEAR ( [Date] ) 
+				                RETURN 
+				                    RANKX ( 
+				                        FILTER ( 
+				                            __Dates
+				                            , YEAR ( [Date] ) = __CurrentYear 
+				                            && NOT WEEKDAY ( [Date], 2 ) IN { 5, 6 } 
+				                        )
+				                        , [Date], [Date], ASC, DENSE
+				                    )
+				
+				            , "Closed Period",    [Date] <= __TodayDate
+				            , "Today",            [Date] =  __TodayDate
+				
+				            , "ISO Year",         YEAR ( [Date] - WEEKDAY ( [Date], 2 ) + 4 )    -- ISO 8601: week belongs to the year of its Thursday
+				            
+				            , "ISO Week",         WEEKNUM ( [Date], 21 )
+				            , "ISO Week Date",    [Date] + TIME ( 0, 0, WEEKNUM ( [Date], 21 ) ) -- \Ws dd mmm yy
+				            , "ISO Week ID",      DATEDIFF ( __TodayMonday, [Date] - WEEKDAY ( [Date], 2 ) + 1, DAY ) / 7    -- 0 = Current Week, Negative => history, Positive => Future
+				
+				            , "ISO Week as Date",
+				                    VAR __Weekday   = WEEKDAY ( [Date], 2 )
+				                    VAR __WeekStart = [Date] - __Weekday + 1
+				                    VAR __WeekEnd   = [Date] - __Weekday + 7
+				                RETURN
+				                    __WeekStart + TIME ( MONTH ( __WeekEnd ), WEEKNUM ( [Date], 21 ), DAY ( __WeekEnd ) )
+				                    -- format "\Wnn: dd.mm - ss.hh" → "W09: 29.02 - 06.03"
+				                    -- week number in minutes, end-of-week day/month in seconds/hours; date part is real, so the column sorts chronologically
+				
+				        )
+				RETURN
+				    __Result
+				```
+

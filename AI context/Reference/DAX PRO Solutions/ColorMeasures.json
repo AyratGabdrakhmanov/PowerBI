@@ -1,0 +1,115 @@
+{
+  "description": "Reference color palette for every project (user 2026-10-30): the Sales Channels / ClientB palette (step 17) + Agency logo blue. Measures go into _Measures, display folder _Color, hidden; bind visual colors to them with fx instead of hex literals (the theme palette only resolves ColorId 0-9, so extra fixed colors need a measure). CleanUnused.ps1 never deletes measures in Color / _Color / __Color. Add via TOM (Measures.Add) or TMDL; captions below go to cultures he-IL / en-US. Refactoring.md step 17. Change log: 2026-10-30 created (Sales_ClientB palette + Blue Logo).",
+  "tables": [
+    {
+      "name": "_Measures",
+      "measures": [
+        {
+          "name": "Light",
+          "expression": "\"#FDFCFA\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "default button / background, warm white"
+        },
+        {
+          "name": "Grey Lightest",
+          "expression": "\"#F9F7F2\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "canvas / panel background"
+        },
+        {
+          "name": "Grey",
+          "expression": "\"#E0DED9\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "lines, borders, total fill (non-IBCS)"
+        },
+        {
+          "name": "Grey Dark",
+          "expression": "\"#605E5C\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "secondary text, check boxes, outlines"
+        },
+        {
+          "name": "Blue Background",
+          "expression": "\"#F7F9FC\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "page background (Agency)"
+        },
+        {
+          "name": "Blue Semi-Light",
+          "expression": "\"#CBD8EC\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "light highlight"
+        },
+        {
+          "name": "Blue Light",
+          "expression": "\"#4A8DDC\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "accent, links"
+        },
+        {
+          "name": "Blue Vivid",
+          "expression": "\"#294D92\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "strong accent"
+        },
+        {
+          "name": "Blue Dark",
+          "expression": "\"#4C5D8A\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "hover state"
+        },
+        {
+          "name": "Teal",
+          "expression": "\"#389289\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "selected state"
+        },
+        {
+          "name": "Blue Logo",
+          "expression": "\"#134591\"",
+          "displayFolder": "_Color",
+          "isHidden": true,
+          "description": "Agency logo blue: info icons, tooltip boxes"
+        }
+      ]
+    }
+  ],
+  "captions": {
+    "he-IL": {
+      "Light": "בהיר",
+      "Grey Lightest": "אפור בהיר ביותר",
+      "Grey": "אפור",
+      "Grey Dark": "אפור כהה",
+      "Blue Background": "רקע כחול",
+      "Blue Semi-Light": "כחול בהיר למחצה",
+      "Blue Light": "כחול בהיר",
+      "Blue Vivid": "כחול עז",
+      "Blue Dark": "כחול כהה",
+      "Teal": "טורקיז",
+      "Blue Logo": "כחול לוגו"
+    },
+    "en-US": {
+      "Light": "Light",
+      "Grey Lightest": "Grey Lightest",
+      "Grey": "Grey",
+      "Grey Dark": "Grey Dark",
+      "Blue Background": "Blue Background",
+      "Blue Semi-Light": "Blue Semi-Light",
+      "Blue Light": "Blue Light",
+      "Blue Vivid": "Blue Vivid",
+      "Blue Dark": "Blue Dark",
+      "Teal": "Teal",
+      "Blue Logo": "Logo Blue"
+    }
+  }
+}

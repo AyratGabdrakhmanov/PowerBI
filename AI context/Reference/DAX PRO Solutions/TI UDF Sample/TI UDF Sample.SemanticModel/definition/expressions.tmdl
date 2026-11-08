@@ -1,0 +1,16 @@
+expression Server = "BI43010" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: d4aff5e4-2c9d-46d3-b0d2-f84d0c580e03
+	queryGroup: PowerLoader_Sales
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression DB = "PowerLoader" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: a5be6fd5-192a-48a2-89f8-6782fd830d07
+	queryGroup: PowerLoader_Sales
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,790 @@
+{
+  "calculatedtables": [
+    {
+      "name": "Calendar",
+      "dataCategory": "Time",
+      "columns": [
+        {
+          "type": "calculatedTableColumn",
+          "name": "Date",
+          "dataType": "dateTime",
+          "isKey": true,
+          "sourceColumn": "[Date]",
+          "formatString": "dd mmm yyyy",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year",
+          "dataType": "int64",
+          "sourceColumn": "[Year]",
+          "formatString": "0",
+          "summarizeBy": "none",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Closed Period",
+          "dataType": "boolean",
+          "sourceColumn": "[Closed Period]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Flag",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Today",
+          "dataType": "boolean",
+          "sourceColumn": "[Today]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Flag",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month To Date",
+          "dataType": "boolean",
+          "sourceColumn": "[Month To Date]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Flag",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year To Date",
+          "dataType": "int64",
+          "sourceColumn": "[Year To Date]",
+          "formatString": "\"True\";\"True\";\"False\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Flag",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year ID",
+          "dataType": "int64",
+          "sourceColumn": "[Year ID]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year SortBack",
+          "dataType": "int64",
+          "sourceColumn": "[Year SortBack]",
+          "formatString": "0",
+          "summarizeBy": "none",
+          "sortByColumn": "Year SortBack Key",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year SortBack Key",
+          "dataType": "int64",
+          "sourceColumn": "[Year SortBack Key]",
+          "formatString": "#,0",
+          "isHidden": true,
+          "summarizeBy": "none",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Year Date",
+          "dataType": "dateTime",
+          "sourceColumn": "[Year Date]",
+          "formatString": "yyyy",
+          "summarizeBy": "none",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Quarter Name",
+          "dataType": "dateTime",
+          "sourceColumn": "[Quarter Name]",
+          "formatString": "\\Qd",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Quarter ID",
+          "dataType": "int64",
+          "sourceColumn": "[Quarter ID]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Quarter SortBack",
+          "dataType": "dateTime",
+          "sourceColumn": "[Quarter SortBack]",
+          "formatString": "\\Qd",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ],
+          "sortByColumn": "Quarter SortBack Key"
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Quarter SortBack Key",
+          "dataType": "int64",
+          "sourceColumn": "[Quarter SortBack Key]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ],
+          "isHidden": true
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month Year",
+          "dataType": "dateTime",
+          "sourceColumn": "[Month Year]",
+          "formatString": "mmm yyyy",
+          "summarizeBy": "none",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month Name",
+          "dataType": "dateTime",
+          "sourceColumn": "[Month Name]",
+          "formatString": "mmm",
+          "summarizeBy": "none",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month SortBack",
+          "dataType": "dateTime",
+          "sourceColumn": "[Month SortBack]",
+          "formatString": "mmmm",
+          "summarizeBy": "none",
+          "sortByColumn": "Month SortBack Key",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month ID",
+          "dataType": "int64",
+          "sourceColumn": "[Month ID]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month SortBack Key",
+          "dataType": "int64",
+          "sourceColumn": "[Month SortBack Key]",
+          "formatString": "#,0",
+          "isHidden": true,
+          "summarizeBy": "none",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month Year SortBack",
+          "dataType": "dateTime",
+          "sourceColumn": "[Month Year SortBack]",
+          "formatString": "mmm yyyy",
+          "summarizeBy": "none",
+          "sortByColumn": "Month SortBack Key",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Month Year Current",
+          "dataType": "string",
+          "sourceColumn": "[Month Year Current]",
+          "summarizeBy": "none",
+          "sortByColumn": "Month SortBack Key",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Date ID",
+          "dataType": "int64",
+          "sourceColumn": "[Date ID]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Date Short",
+          "dataType": "dateTime",
+          "sourceColumn": "[Date Short]",
+          "formatString": "dd mmm",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Date SortBack",
+          "dataType": "dateTime",
+          "sourceColumn": "[Date SortBack]",
+          "formatString": "dd mmm",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ],
+          "sortByColumn": "Date SortBack Key"
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Date SortBack Key",
+          "dataType": "int64",
+          "sourceColumn": "[Date SortBack Key]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ],
+          "isHidden": true
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "IsWorking",
+          "dataType": "boolean",
+          "sourceColumn": "[IsWorking]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "ISO Week",
+          "dataType": "int64",
+          "sourceColumn": "[ISO Week]",
+          "formatString": "0",
+          "summarizeBy": "none",
+          "displayFolder": "__ISO",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "ISO Year",
+          "dataType": "int64",
+          "sourceColumn": "[ISO Year]",
+          "formatString": "0",
+          "summarizeBy": "none",
+          "displayFolder": "__ISO",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Half Of Year",
+          "dataType": "dateTime",
+          "sourceColumn": "[Half Of Year]",
+          "formatString": "\\Hm - yyyy",
+          "summarizeBy": "none",
+          "displayFolder": "__Year",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Quarter Year",
+          "dataType": "dateTime",
+          "sourceColumn": "[Quarter Year]",
+          "formatString": "yyyy \\Qd",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            },
+            {
+              "name": "UnderlyingDateTimeDataType",
+              "value": "Date"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Working Day Of Year",
+          "dataType": "int64",
+          "sourceColumn": "[Working Day Of Year]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__Day",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Current Quarter",
+          "dataType": "boolean",
+          "sourceColumn": "[Current Quarter]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Quarter",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "Current Month",
+          "dataType": "boolean",
+          "sourceColumn": "[Current Month]",
+          "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+          "summarizeBy": "none",
+          "displayFolder": "__Month",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "ISO Week Date",
+          "dataType": "dateTime",
+          "sourceColumn": "[ISO Week Date]",
+          "formatString": "\\Ws dd mmm yy",
+          "summarizeBy": "none",
+          "displayFolder": "__ISO",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "ISO Week ID",
+          "dataType": "int64",
+          "sourceColumn": "[ISO Week ID]",
+          "formatString": "#,0",
+          "summarizeBy": "none",
+          "displayFolder": "__ISO",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "User"
+            }
+          ]
+        },
+        {
+          "type": "calculatedTableColumn",
+          "name": "ISO Week as Date",
+          "dataType": "dateTime",
+          "sourceColumn": "[ISO Week as Date]",
+          "formatString": "\\Wnn: dd.mm - ss.hh",
+          "summarizeBy": "none",
+          "displayFolder": "__ISO",
+          "annotations": [
+            {
+              "name": "SummarizationSetBy",
+              "value": "Automatic"
+            },
+            {
+              "name": "PBI_FormatHint",
+              "value": "{\"isCustom\":true}"
+            }
+          ]
+        }
+      ],
+      "partitions": [
+        {
+          "name": "Calendar",
+          "mode": "import",
+          "source": {
+            "type": "calculated",
+            "expression": "\nVAR __TodayDate = TODAY()\nVAR __Language  = \"He\"    -- \"He\" (default) / \"En\": language of the text labels (Month Year Current)\nVAR __Dates =\n    CALENDAR (\n        DATE ( YEAR ( __TodayDate ) - 2, 01, 01 ),\n        DATE ( YEAR ( __TodayDate ) + 1, 12, 31 )\n    )\nVAR __TodayMonday = __TodayDate - WEEKDAY ( __TodayDate, 2 ) + 1\n\nVAR __Result = \n    ADDCOLUMNS (\n        __Dates                                                                 -- dd/mmm/yyyy ddd\n            , \"Year\",             YEAR ( [Date] )   \n            , \"Year Date\",        EOMONTH ( [Date], - MONTH ( [Date] ) ) + 1    -- yyyy           \n            , \"Year ID\",          DATEDIFF ( __TodayDate, [Date], YEAR  )       -- 0 = Current Year, Negative => history, Positive => Future\n            , \"Year SortBack\",      YEAR ( [Date] )                                   -- sorted by Year SortBack Key; level 0 of _Year-Month SortBack and _Year-Q-Month-Date SortBack\n            , \"Year SortBack Key\",    DATEDIFF ( __TodayDate, [Date], YEAR ) * ( -1 )   -- to have Recent Year upper in the slicers\n\n            , \"Half Of Year\",     DATE ( YEAR ( [Date] ), ROUNDDOWN ( ( MONTH ( [Date] ) - 1 ) / 6, 0 ) + 1, 1 )                -- \\Hm - yyyy\n\n            , \"Quarter Year\",     DATE ( YEAR ( [Date] ), ( QUARTER ( [Date] ) - 1 ) * 3 + 1, QUARTER ( [Date] ) )              -- yyyy \\Qd\n            , \"Quarter Name\",     DATE ( YEAR ( [Date] ), ( QUARTER ( [Date] ) - 1 ) * 3 + 1, QUARTER ( [Date] ) )              -- \\Qd\n            , \"Quarter ID\",       DATEDIFF ( __TodayDate, [Date], QUARTER  )                                                    -- 0 = Current Quarter, Negative => history, Positive => Future\n            , \"Quarter SortBack\",     DATE ( YEAR ( [Date] ), ( QUARTER ( [Date] ) - 1 ) * 3 + 1, QUARTER ( [Date] ) )   -- \\Qd, sorted by Quarter SortBack Key; level 1 of _Year-Q-Month-Date SortBack\n            , \"Quarter SortBack Key\", DATEDIFF ( __TodayDate, [Date], QUARTER ) * ( -1 )   -- recent quarter first\n            , \"Current Quarter\",  QUARTER ( [Date] ) = QUARTER ( __TodayDate ) && YEAR ( [Date] ) = YEAR ( __TodayDate )        -- OR  \"Quarter ID\" = 0\n\n            , \"Month Year\",       EOMONTH ( [Date], -1 ) +1                             -- mmm yyyy\n            , \"Month Name\",       EOMONTH ( [Date], -1 ) +1                             -- mmm\n            , \"Month SortBack\",     EOMONTH ( [Date], -1 ) +1                             -- mmmm, sorted by Month SortBack Key\n            , \"Month Year SortBack\", EOMONTH ( [Date], -1 ) +1                           -- mmm yyyy, sorted by Month SortBack Key; level 1 of _Month-Date SortBack\n            , \"Month Year Current\",\n                VAR __Month   = EOMONTH ( [Date], 0 )\n                VAR __Current = __Month = EOMONTH ( __TodayDate, 0 )\n                VAR __IsHe    = __Language = \"He\"\n                RETURN\n                    SWITCH ( TRUE ()\n                        , __Current && __IsHe, \"חודש נוכחי\"\n                        , __Current,           \"Current Month\"\n                        , __IsHe,              FORMAT ( __Month, \"mmmm yyyy\", \"he-IL\" )\n                        , FORMAT ( __Month, \"mmmm yyyy\", \"en-US\" )\n                    )\n            -- text, sorted by Month SortBack Key; current month = fixed label, so a slicer saved on it moves by itself\n            , \"Month ID\",         DATEDIFF ( __TodayDate, [Date], MONTH )               -- 0 = Current Month, Negative => history, Positive => Future\n            , \"Month SortBack Key\",   DATEDIFF ( __TodayDate, [Date], MONTH ) * ( -1 )      -- to have Recent Month upper in the slicers. Drawback: it's sorting column\n            , \"Date Short\",       [Date]                                                -- dd mmm, level 2 of _Month-Date SortBack\n            , \"Date ID\",          DATEDIFF ( __TodayDate, [Date], DAY )                 -- 0 = Today, Negative => history, Positive => Future\n            , \"Date SortBack\",        [Date]                                         -- dd mmm, sorted by Date SortBack Key; level 3 of _Year-Q-Month-Date SortBack\n            , \"Date SortBack Key\",    DATEDIFF ( __TodayDate, [Date], DAY ) * ( -1 )   -- recent date first\n            , \"Current Month\",    EOMONTH ( [Date], 0 ) = EOMONTH ( __TodayDate, 0 )    -- OR  \"Month ID\" = 0\n\n            , \"IsWorking\",        NOT WEEKDAY ( [Date], 2 ) IN { 5, 6 }                 -- Weekends: Friday, Saturday\n            , \"Working Day Of Year\",\n                    VAR __CurrentYear = YEAR ( [Date] ) \n                RETURN \n                    RANKX ( \n                        FILTER ( \n                            __Dates\n                            , YEAR ( [Date] ) = __CurrentYear \n                            && NOT WEEKDAY ( [Date], 2 ) IN { 5, 6 } \n                        )\n                        , [Date], [Date], ASC, DENSE\n                    )\n\n            , \"Closed Period\",    [Date] <= __TodayDate\n            , \"Today\",            [Date] =  __TodayDate\n            , \"Month To Date\",    DAY ( [Date] ) <= DAY ( __TodayDate )    -- days 1..N of every month, N = today's day incl. today: apples to apples with the current MTD\n            , \"Year To Date\",     INT ( YEAR ( [Date] ) = YEAR ( __TodayDate ) && [Date] <= __TodayDate )    -- 1 = 1 Jan .. today of the current year (YTD); flag INT 1 / 0\n\n            , \"ISO Year\",         YEAR ( [Date] - WEEKDAY ( [Date], 2 ) + 4 )    -- ISO 8601: week belongs to the year of its Thursday\n            \n            , \"ISO Week\",         WEEKNUM ( [Date], 21 )\n            , \"ISO Week Date\",    [Date] + TIME ( 0, 0, WEEKNUM ( [Date], 21 ) ) -- \\Ws dd mmm yy\n            , \"ISO Week ID\",      DATEDIFF ( __TodayMonday, [Date] - WEEKDAY ( [Date], 2 ) + 1, DAY ) / 7    -- 0 = Current Week, Negative => history, Positive => Future\n\n            , \"ISO Week as Date\",\n                    VAR __Weekday   = WEEKDAY ( [Date], 2 )\n                    VAR __WeekStart = [Date] - __Weekday + 1\n                    VAR __WeekEnd   = [Date] - __Weekday + 7\n                RETURN\n                    __WeekStart + TIME ( MONTH ( __WeekEnd ), WEEKNUM ( [Date], 21 ), DAY ( __WeekEnd ) )\n                    -- format \"\\Wnn: dd.mm - ss.hh\" → \"W09: 29.02 - 06.03\"\n                    -- week number in minutes, end-of-week day/month in seconds/hours; date part is real, so the column sorts chronologically\n\n        )\nRETURN\n    __Result"
+          }
+        }
+      ],
+      "hierarchies": [
+        {
+          "name": "_Year-Month",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Year"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Month Name"
+            }
+          ]
+        },
+        {
+          "name": "_Year-Month SortBack",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Year SortBack"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Month SortBack"
+            }
+          ]
+        },
+        {
+          "name": "_Year-Q-Month",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Year"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Quarter Name"
+            },
+            {
+              "name": "   ",
+              "ordinal": 2,
+              "column": "Month Name"
+            }
+          ]
+        },
+        {
+          "name": "_Year-Q-Month-Date",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Year"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Quarter Name"
+            },
+            {
+              "name": "   ",
+              "ordinal": 2,
+              "column": "Month Name"
+            },
+            {
+              "name": "    ",
+              "ordinal": 3,
+              "column": "Date"
+            }
+          ]
+        },
+        {
+          "name": "_Year-Q-Month-Date SortBack",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Year SortBack"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Quarter SortBack"
+            },
+            {
+              "name": "   ",
+              "ordinal": 2,
+              "column": "Month SortBack"
+            },
+            {
+              "name": "    ",
+              "ordinal": 3,
+              "column": "Date SortBack"
+            }
+          ]
+        },
+        {
+          "name": "_Month-Date SortBack",
+          "levels": [
+            {
+              "name": " ",
+              "ordinal": 0,
+              "column": "Month Year SortBack"
+            },
+            {
+              "name": "  ",
+              "ordinal": 1,
+              "column": "Date Short"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
